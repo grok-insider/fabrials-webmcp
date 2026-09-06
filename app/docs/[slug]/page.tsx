@@ -39,7 +39,7 @@ export default async function Docs({
       className="mx-auto flex max-w-7xl flex-col items-start gap-8 px-6 py-10 lg:flex-row lg:gap-14 lg:px-10"
     >
       <DocsSidebar />
-      <article className="min-w-0 flex-1 pb-16 lg:max-w-3xl">
+      <article className="w-full min-w-0 flex-1 pb-16 lg:max-w-3xl">
         <p className="mb-4 text-[11px] uppercase tracking-[.14em] text-muted-foreground">
           {item?.category ?? "Documentation"}
         </p>
