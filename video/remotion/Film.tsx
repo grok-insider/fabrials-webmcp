@@ -13,7 +13,14 @@ import { TransitionSeries, linearTiming } from "@remotion/transitions";
 import { fade } from "@remotion/transitions/fade";
 import { Comparison } from "../../registry/components/comparison";
 import { CoffeeMachine } from "../../components/coffee-machine";
-import { coffeeProducts, coffeeTotal } from "../../lib/coffee-demo";
+import {
+  selectionMotion as motion,
+  easeBetween,
+  cursorAt,
+  choosePath,
+  reviewPath,
+} from "./motion";
+import { coffeeProducts } from "../../lib/coffee-demo";
 import timing from "./timing.json";
 import { narration } from "./script";
 import captions from "./captions.json";
@@ -181,16 +188,26 @@ function Chapter({ index }: { index: number }) {
 function Pointer({
   x,
   y,
-  click = false,
+  clickFrame,
 }: {
   x: number;
   y: number;
-  click?: boolean;
+  clickFrame?: number;
 }) {
   const f = useCurrentFrame();
+  const age = clickFrame === undefined ? -1 : f - clickFrame;
+  const clicking = age >= 0 && age < 18;
   return (
-    <div style={{ position: "absolute", left: x, top: y, zIndex: 7 }}>
-      {click && (
+    <div
+      style={{
+        position: "absolute",
+        left: x,
+        top: y,
+        zIndex: 7,
+        transform: `scale(${clicking ? 1 - Math.sin((age / 18) * Math.PI) * 0.14 : 1})`,
+      }}
+    >
+      {clicking && (
         <div
           style={{
             position: "absolute",
@@ -200,8 +217,8 @@ function Pointer({
             height: 70,
             border: `3px solid ${ink}`,
             borderRadius: 99,
-            opacity: tween(f % 18, 0, 18, 0.5, 0),
-            transform: `scale(${tween(f % 18, 0, 18, 0.5, 1.4)})`,
+            opacity: tween(age, 0, 18, 0.5, 0),
+            transform: `scale(${tween(age, 0, 18, 0.5, 1.4)})`,
           }}
         />
       )}
@@ -306,9 +323,24 @@ function Intro() {
 function Shop({ step }: { step: number }) {
   const f = useCurrentFrame();
   const highlighted = step > 1 || (step === 1 && f > 295);
-  const chosen = step > 3 || (step === 3 && f > 65);
-  const filter = (step === 3 && f > 140) || (step === 4 && f < 75);
-  const review = step === 4 && f > 155;
+  const chosen = step > 3 || (step === 3 && f >= motion.machineArrives);
+  const filter =
+    (step === 3 && f >= motion.filterArrives) ||
+    (step === 4 && f < motion.removeClick);
+  const review = step === 4 && f >= motion.reviewClick + 10;
+  const arrival =
+    step === 3
+      ? spring({
+          frame: f - motion.machineArrives,
+          fps: 30,
+          config: { damping: 20, stiffness: 180 },
+        })
+      : 1;
+  const filterProgress =
+    step === 3
+      ? easeBetween(f, motion.filterArrives, motion.filterArrives + 18)
+      : 1 - easeBetween(f, motion.removeClick, motion.removeClick + 18);
+  const total = Math.round(1290 + filterProgress * 24);
   const typed = "Two flat whites. A 32 cm counter. Keep my 58 mm accessories.";
   const title =
     step === 1
@@ -333,7 +365,7 @@ function Shop({ step }: { step: number }) {
           background: "white",
           boxShadow: "0 28px 70px #25311b12",
           overflow: "hidden",
-          transform: `translateY(${tween(f, 0, 180, 4, 0)}px)`,
+          transform: "translateY(0)",
         }}
       >
         <div
@@ -375,6 +407,7 @@ function Shop({ step }: { step: number }) {
                       padding: "11px 24px",
                       background: chosen && p.id === "studio" ? lime : "white",
                       fontSize: 21,
+                      transform: `scale(${step === 3 && p.id === "studio" && f >= motion.chooseClick && f < motion.chooseClick + 18 ? 1 - Math.sin(((f - motion.chooseClick) / 18) * Math.PI) * 0.05 : 1})`,
                     }}
                   >
                     {chosen && p.id === "studio" ? "✓ Selected" : "+ Choose"}
@@ -497,7 +530,9 @@ function Shop({ step }: { step: number }) {
                       <span>
                         {"compare_coffee_machines".slice(
                           0,
-                          Math.floor(tween(f, 0, 40) * "compare_coffee_machines".length),
+                          Math.floor(
+                            tween(f, 0, 40) * "compare_coffee_machines".length,
+                          ),
                         )}
                       </span>
                       <br />
@@ -558,7 +593,14 @@ function Shop({ step }: { step: number }) {
                     justifyContent: "space-between",
                     fontSize: 26,
                     marginTop: 32,
-                    opacity: chosen ? 1 : 0,
+                    opacity: chosen
+                      ? tween(
+                          f,
+                          step === 3 ? motion.machineArrives : -20,
+                          step === 3 ? motion.machineArrives + 12 : -1,
+                        )
+                      : 0,
+                    transform: `translateY(${(1 - arrival) * 18}px)`,
                   }}
                 >
                   <span>Studio Dual</span>
@@ -570,7 +612,8 @@ function Shop({ step }: { step: number }) {
                     padding: 20,
                     border: `1px solid ${filter ? ink : line}`,
                     borderRadius: 12,
-                    background: filter ? lime : "white",
+                    background: `rgb(${255 - Math.round(filterProgress * 45)}, ${255 - Math.round(filterProgress * 10)}, ${255 - Math.round(filterProgress * 104)})`,
+                    transform: `scale(${1 + Math.sin(filterProgress * Math.PI) * 0.025})`,
                     display: "flex",
                     justifyContent: "space-between",
                     fontSize: 22,
@@ -602,13 +645,7 @@ function Shop({ step }: { step: number }) {
                   }}
                 >
                   <span>Total</span>
-                  <span>
-                    €
-                    {coffeeTotal(
-                      chosen ? "studio" : null,
-                      filter,
-                    ).toLocaleString("en")}
-                  </span>
+                  <span>{chosen ? `€${total.toLocaleString("en")}` : "—"}</span>
                 </div>
                 <div
                   style={{
@@ -620,9 +657,12 @@ function Shop({ step }: { step: number }) {
                     display: "flex",
                     justifyContent: "space-between",
                     fontSize: 23,
+                    opacity: chosen ? 1 : 0.4,
                   }}
                 >
-                  <span>Review selection</span>
+                  <span>
+                    {chosen ? "Review selection" : "Choose a machine first"}
+                  </span>
                   <span>→</span>
                 </div>
                 <p style={{ fontSize: 16, color: muted, lineHeight: 1.5 }}>
@@ -708,25 +748,83 @@ function Shop({ step }: { step: number }) {
           </>
         )}
       </div>
-      {step === 1 && f > 100 && f < 165 && (
+      {step === 3 && f >= motion.chooseClick && f < motion.machineArrives && (
+        <div
+          style={{
+            position: "absolute",
+            left: easeBetween(
+              f,
+              motion.chooseClick,
+              motion.machineArrives,
+              442,
+              1340,
+            ),
+            top:
+              easeBetween(
+                f,
+                motion.chooseClick,
+                motion.machineArrives,
+                345,
+                385,
+              ) -
+              Math.sin(
+                easeBetween(f, motion.chooseClick, motion.machineArrives) *
+                  Math.PI,
+              ) *
+                80,
+            width: 170,
+            transform: `scale(${easeBetween(f, motion.chooseClick, motion.machineArrives, 1, 0.45)})`,
+            transformOrigin: "top left",
+            background: paper,
+            borderRadius: 20,
+            boxShadow: "0 14px 40px #20271f25",
+            zIndex: 6,
+            opacity: tween(
+              f,
+              motion.machineArrives - 5,
+              motion.machineArrives,
+              1,
+              0,
+            ),
+          }}
+        >
+          <CoffeeMachine style={{ width: 170 }} />
+        </div>
+      )}
+      {step === 3 && !chosen && (
+        <div
+          style={{
+            position: "absolute",
+            left: 1320,
+            top: 399,
+            fontSize: 23,
+            color: muted,
+            opacity: 1 - tween(f, motion.chooseClick, motion.machineArrives),
+          }}
+        >
+          Your setup starts with a machine.
+        </div>
+      )}
+      {step === 1 && f > 225 && f < 325 && (
         <Pointer
-          x={interpolate(f, [100, 138], [1640, 1500], clamp)}
-          y={interpolate(f, [100, 138], [780, 575], clamp)}
-          click={f > 138}
+          {...cursorAt(f, [
+            [225, 1790, 900],
+            [280, 1540, 580],
+            [325, 1540, 580],
+          ])}
+          clickFrame={295}
         />
       )}
-      {step === 3 && f < 160 && (
+      {step === 3 && f < 156 && (
         <Pointer
-          x={interpolate(f, [0, 55, 95, 130], [660, 710, 1550, 1720], clamp)}
-          y={interpolate(f, [0, 55, 95, 130], [700, 795, 630, 494], clamp)}
-          click={(f > 55 && f < 75) || f > 130}
+          {...cursorAt(f, choosePath)}
+          clickFrame={f < 80 ? motion.chooseClick : motion.filterClick}
         />
       )}
       {step === 4 && !review && (
         <Pointer
-          x={interpolate(f, [0, 65, 110, 145], [1700, 1720, 1570, 1580], clamp)}
-          y={interpolate(f, [0, 65, 110, 145], [710, 494, 730, 695], clamp)}
-          click={(f > 65 && f < 85) || f > 145}
+          {...cursorAt(f, reviewPath)}
+          clickFrame={f < 100 ? motion.removeClick : motion.reviewClick}
         />
       )}
     </Base>

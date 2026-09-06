@@ -43,7 +43,7 @@ it("streams ranges and preserves seeking and download headers", async () => {
   expect((await response.arrayBuffer()).byteLength).toBe(2);
   expect(upstream.mock.calls[0][1].headers.range).toBe("bytes=0-1");
   expect(upstream.mock.calls[0][0].pathname).toBe(
-    "/apps/videos/fabrials-ui/v3/demo.mp4",
+    "/apps/videos/fabrials-ui/v4/demo.mp4",
   );
 });
 it("supports HEAD and rejects malformed ranges before fetching", async () => {

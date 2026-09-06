@@ -14,7 +14,7 @@ if (process.env.PUBLISH_SOURCES === "1") {
     ...Array.from({ length: 6 }, (_, i) => `voice-${i}.mp3.alignment.json`),
   ]) {
     assets[`../remotion-public/${name}`] = {
-      key: `videos/fabrials-ui/v3/source/${name}`,
+      key: `videos/fabrials-ui/v4/source/${name}`,
       type: name.endsWith("json")
         ? "application/json"
         : name.endsWith("mp3")

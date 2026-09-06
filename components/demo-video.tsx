@@ -41,7 +41,7 @@ export function DemoVideo() {
           </p>
         </div>
         <a
-          href="/api/demo-media/demo.mp4?v=4&download=1"
+          href="/api/demo-media/demo.mp4?v=5&download=1"
           className="inline-flex min-h-10 items-center gap-2 text-sm underline underline-offset-4"
         >
           <Download className="size-4" />
@@ -55,15 +55,15 @@ export function DemoVideo() {
           controls={started}
           playsInline
           preload="none"
-          poster="/api/demo-media/poster.jpg?v=4"
+          poster="/api/demo-media/poster.jpg?v=5"
           aria-label="Fabrials UI: compare a coffee setup, understand the recommendation, and review your selection"
           onPlay={() => setStarted(true)}
           onError={() => setError(true)}
         >
-          <source src="/api/demo-media/demo.mp4?v=4" type="video/mp4" />
+          <source src="/api/demo-media/demo.mp4?v=5" type="video/mp4" />
           <track
             kind="captions"
-            src="/api/demo-media/transcript.vtt?v=4"
+            src="/api/demo-media/transcript.vtt?v=5"
             srcLang="en"
             label="English"
           />

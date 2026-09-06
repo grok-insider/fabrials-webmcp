@@ -25,10 +25,12 @@ The composition mixes voice with a quiet instrumental bed and fades the music at
 
 ## Publish
 
-bun run video:publish uses runtime S3_* credentials, PUTs and HEAD-verifies the public assets in bucket apps, prefix videos/fabrials-ui/v3/. PUBLISH_SOURCES=1 also preserves generated narration, character alignments and score under source/; these are not exposed by the public media route.
+bun run video:publish uses runtime S3_* credentials, PUTs and HEAD-verifies the public assets in bucket apps, prefix videos/fabrials-ui/v4/. PUBLISH_SOURCES=1 also preserves generated narration, character alignments and score under source/; these are not exposed by the public media route.
 
 Preserve Content-Encoding: identity and Cache-Control: no-transform so proxies retain media lengths and seeking. Bump both prefix and player version when replacing a published film.
 
 ## Brand pronunciation
 
 Fabrials uses the explicit IPA replacement `/ˈfæbriəlz/` (FAB-ree-uhlz), replacing the old split spelling. This is an adopted brand reading, not a claim of one canonical Stormlight pronunciation. Research and reference analysis: [demo-refinement.md](../docs/demo-refinement.md). Grok Eve receives IPA through the relay; the displayed spelling remains Fabrials.
+
+Motion refinement: interaction targets and event ordering live in motion.ts. Cursor movement uses smooth acceleration/deceleration with stationary dwell during each click; click feedback runs once from the event frame. Machine selection flies into the cart before the row settles, the filter and total interpolate together, and an empty cart shows a placeholder instead of a misleading zero/review action. Motion tests protect cursor targeting and event order.

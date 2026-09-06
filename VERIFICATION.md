@@ -48,3 +48,10 @@ Reproduce consumer installation with a local dev server running and `bun run tes
 - Published commit 10b7fd4 via Coolify dibgwffvpm9vz17gihs1fem8 (finished). Final film: 65.685333 s, 6,668,247 bytes, 1080p H.264 / stereo AAC. Final audio uses the same checked mix (-18.24 LUFS, -3.88 dBTP).
 - Public v=4 media responds 206 to Range, bytes 0-1023/6668247, Content-Length 1024. Chrome decodes audio unmuted and seeks to 55.5 s successfully. Public task UI passes light/dark axe checks, mobile layout and keyboard review. Native coffee/explorer/declarative/navigation checks and fresh public registry installs/builds pass on the deployed release.
 - All public film assets plus six narration clips, six alignment files and the original score were PUT/HEAD verified under apps/videos/fabrials-ui/v3/ in house S3.
+
+## Motion refinement · 2026-09-07
+
+- Cursor paths now decelerate onto actual controls and hold through each click. Click feedback is a single frame-driven pulse.
+- The selected machine travels from its product image into the cart; the cart row enters with a damped spring, and accessory color/total changes ease together. Empty selection shows a dash and an inactive selection prompt instead of €0 and a review action.
+- Reviewed an animated 10.5-second selection clip and sequential frames across the product transfer. TypeScript/ESLint, 38 tests, production registry/site build and diff checks pass.
+- Final Remotion film: 65.685333 seconds, 1920×1080 H.264, 48 kHz AAC, 5,295,871 bytes. Existing Grok narration and music retained. Assets and audio/alignment sources PUT/HEAD verified in apps/videos/fabrials-ui/v4/. Player revision v=5.
