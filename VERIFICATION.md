@@ -1,5 +1,7 @@
 # Verification — 2026-09-06
 
+- Production at https://ui.fabrials.com: healthy HTTPS service, 19 registry items, native Chrome tool/form flows and a real MCP 2026-07-28 discovery/call round trip passed. Clean Vite and Next.js consumers installed and built from the public registry.
+
 - TypeScript and ESLint pass; Next.js production build renders all documentation routes.
 - 20 tests cover current/legacy MCP, discovery, tool execution, resource/prompt reading, additional input, progress, cancellation, subscriptions, WebMCP lifecycle, schema validation, OAuth transient state/issuer partitioning, connector destination guards and component behavior.
 - Registry entries install through the real shadcn CLI into clean Vite and Next.js projects. Both consumers typecheck and build, including the optional Node connector in Next.js.
