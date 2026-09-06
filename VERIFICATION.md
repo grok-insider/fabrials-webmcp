@@ -34,3 +34,5 @@ Reproduce consumer installation with a local dev server running and `bun run tes
 - FFmpeg measured the final mix at -18.76 LUFS integrated and -3.74 dBTP (no clipping). Audio perceptual listening was unavailable in this agent environment; loudness and stream checks are technical validation.
 - TypeScript/ESLint, all 34 tests and the production registry/site build pass. Timeline tests ensure speech fits every scene; captions contain all narration sentences.
 - Final assets and generated audio sources were PUT/HEAD verified in house S3, apps/videos/fabrials-ui/v2/. Public player version bumped to v=3; byte-range/no-transform behavior preserved.
+- Published commit d06fb29 through Coolify deployment oph3ibgmudpaxllddhjlhyl8 (finished). Public Chrome playback: duration 64.128 s, unmuted volume 1, audio decoded; seek to 55.5 s succeeds without errors. Public Range response: 206, bytes 0-1023/9237490, Content-Length 1024.
+- Public registry installation and production builds passed in fresh Vite and Next.js projects after publication.
