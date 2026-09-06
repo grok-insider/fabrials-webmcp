@@ -1,8 +1,9 @@
 "use client";
 import Link from "next/link";
+import { GitHubLink } from "@/components/github-link";
 import { usePathname } from "next/navigation";
 import { useEffect, useState } from "react";
-import { ArrowUpRight, Moon, Sun, Menu, X, Search } from "lucide-react";
+import { Moon, Sun, Menu, X, Search } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { catalog, guides } from "@/lib/catalog";
@@ -79,14 +80,7 @@ export function SiteHeader() {
           </Link>
         </nav>
         <div className="flex items-center gap-3">
-          <a
-            href="https://github.com/grok-insider/fabrials-webmcp"
-            className="hidden items-center gap-1 text-xs text-muted-foreground hover:text-foreground sm:flex"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            GitHub <ArrowUpRight className="size-3" />
-          </a>
+          <GitHubLink />
           <span className="hidden h-4 border-l sm:block" />
           <Button
             size="icon-sm"

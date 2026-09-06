@@ -117,6 +117,7 @@ export default function Home() {
           </Link>
           <div className="mt-8 max-w-sm">
             <CodeBlock
+              variant="command"
               code={
                 "bunx shadcn@latest add https://ui.fabrials.com/r/webmcp-provider.json"
               }
