@@ -22,16 +22,21 @@ for (const template of ["vite", "next"]) {
       ...(template === "next" ? { next: "16.3.4" } : {}),
     },
     devDependencies: {
-      typescript: "^5.9.0",
+      typescript: "npm:@typescript/typescript6@^6.0.2",
+      "@typescript/native": "npm:typescript@^7.0.2",
       "@types/react": "^19.0.0",
       "@types/react-dom": "^19.0.0",
       "@types/node": "^22.0.0",
       tailwindcss: "^4.0.0",
       "@tailwindcss/postcss": "^4.0.0",
-      ...(template === "vite" ? { vite: "^7.0.0" } : {}),
+      ...(template === "vite" ? { vite: "latest" } : {}),
     },
   };
   await writeFile(join(dir, "package.json"), JSON.stringify(pkg));
+  await writeFile(
+    join(dir, "env.d.ts"),
+    `/// <reference types="${template === "vite" ? "vite/client" : "next"}" />\n`,
+  );
   await writeFile(
     join(dir, "tsconfig.json"),
     JSON.stringify({
@@ -61,7 +66,7 @@ for (const template of ["vite", "next"]) {
     join(dir, "postcss.config.mjs"),
     "export default {plugins:{'@tailwindcss/postcss':{}}};",
   );
-  run("npm", ["install"], dir);
+  run("bun", ["install"], dir);
   const names = [
     "mcp-dashboard",
     "webmcp-provider",
@@ -103,6 +108,6 @@ for (const template of ["vite", "next"]) {
     );
   }
   run(join(dir, "node_modules/.bin/tsc"), ["--noEmit"], dir);
-  run("npm", ["run", "build"], dir);
+  run("bun", ["run", "build"], dir);
 }
 console.log(`Registry installs and builds passed: ${root}`);

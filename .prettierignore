@@ -2,4 +2,4 @@ node_modules
 .next
 public/r
 public/registry.json
-package-lock.json
+bun.lock

@@ -8,8 +8,8 @@ Independent repository; master is the default branch. Git identity: Grok Insider
 - Protocol target: MCP 2026-07-28. Keep legacy compatibility isolated. Never silently replay tool mutations.
 - Browser tokens are memory-only. Never log credentials, arguments, or tool results server-side.
 - Node connector is optional and uses operator-configured destinations; never expose an arbitrary public proxy.
-- Run npm run check and npm test, build the registry/site, and smoke-test the published registry before shipping.
-- Build/start with Node, not Bun runtime. Deploy via Coolify API/UI; secrets only in Coolify.
+- Run bun run check and bun run test, build the registry/site, and smoke-test the published registry before shipping.
+- Use Bun 1.4.2 with the frozen bun.lock for dependencies and scripts. Build/start Next.js with Node. Deploy via Coolify API/UI; secrets only in Coolify.
 
 <!-- BEGIN:nextjs-agent-rules -->
 

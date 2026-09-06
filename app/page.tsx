@@ -118,7 +118,7 @@ export default function Home() {
           <div className="mt-8 max-w-sm">
             <CodeBlock
               code={
-                "npx shadcn@latest add https://ui.fabrials.com/r/webmcp-provider.json"
+                "bunx shadcn@latest add https://ui.fabrials.com/r/webmcp-provider.json"
               }
             />
           </div>

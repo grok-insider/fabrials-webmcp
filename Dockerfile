@@ -1,13 +1,16 @@
+FROM oven/bun:1.4.2-alpine AS bun
 FROM node:22-alpine AS deps
+COPY --from=bun /usr/local/bin/bun /usr/local/bin/bun
 WORKDIR /app
-COPY package.json package-lock.json ./
-RUN npm ci
+COPY package.json bun.lock ./
+RUN bun install --frozen-lockfile
 FROM node:22-alpine AS builder
+COPY --from=bun /usr/local/bin/bun /usr/local/bin/bun
 WORKDIR /app
 ENV NEXT_TELEMETRY_DISABLED=1
 COPY --from=deps /app/node_modules ./node_modules
 COPY . .
-RUN npm run build
+RUN bun run build
 FROM node:22-alpine AS runner
 WORKDIR /app
 ENV NODE_ENV=production NEXT_TELEMETRY_DISABLED=1 HOSTNAME=0.0.0.0 PORT=3000

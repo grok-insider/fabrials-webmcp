@@ -68,7 +68,7 @@ export default async function Docs({
               Installation
             </h2>
             <CodeBlock
-              code={`npx shadcn@latest add https://ui.fabrials.com/r/${slug}.json`}
+              code={`bunx shadcn@latest add https://ui.fabrials.com/r/${slug}.json`}
             />
             <h2 className="mt-10 mb-4 text-xl font-medium tracking-tight">
               API

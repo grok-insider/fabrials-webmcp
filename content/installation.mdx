@@ -2,12 +2,12 @@ Start with a React 19 application configured for Tailwind 4 and shadcn **Base UI
 
 ## Set up shadcn
 
-For a new app, run `npx shadcn@latest create` and select Base UI. For an existing React or Next.js app, run `npx shadcn@latest init` and configure your CSS and import aliases. Use the Nova style for the same defaults as this site.
+For a new app, run `bunx shadcn@latest create` and select Base UI. For an existing React or Next.js app, run `bunx shadcn@latest init` and configure your CSS and import aliases. Use the Nova style for the same defaults as this site.
 
 ## Install a component
 
 ```bash
-npx shadcn@latest add https://ui.fabrials.com/r/mcp-dashboard.json
+bunx shadcn@latest add https://ui.fabrials.com/r/mcp-dashboard.json
 ```
 
 This copies the dashboard, its component dependencies and its React integration. shadcn installs the underlying UI primitives and npm dependencies. Components live in `components/webmcp`; integration helpers live in `lib/mcp` and `lib/webmcp`.
@@ -35,7 +35,7 @@ Add this entry to the `registries` object in your `components.json`:
 }
 ```
 
-Then use `npx shadcn@latest add @fabrials/webmcp-provider`.
+Then use `bunx shadcn@latest add @fabrials/webmcp-provider`.
 
 ## Next.js and Vite
 

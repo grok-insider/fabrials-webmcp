@@ -1,5 +1,8 @@
 # Verification — 2026-09-06
 
+- Bun migration: Bun 1.4.2 frozen installation, TypeScript 7.0.2 checks, ESLint 10.10.0, 20 Vitest tests and production build pass. `bun outdated` reports no pending direct dependency updates. Undici is 8.10.2. Microsoft’s TypeScript 6 API alias and ESLint’s official compatibility utility preserve tooling integration without disabling checks.
+- Clean registry consumers using Bun and TypeScript 7 install and build in both Vite and Next.js. The Next.js fixture includes the updated optional Node connector.
+
 - Production at https://ui.fabrials.com: healthy HTTPS service, 19 registry items, native Chrome tool/form flows and a real MCP 2026-07-28 discovery/call round trip passed. Clean Vite and Next.js consumers installed and built from the public registry.
 
 - TypeScript and ESLint pass; Next.js production build renders all documentation routes.
@@ -10,6 +13,6 @@
 - Mobile examples at 390px have no document overflow. Lighthouse navigation audit: accessibility 100, SEO 100, agentic browsing 100. The daily profile injected Dark Reader attributes before hydration, causing the development-mode console warning; a clean native session is used to distinguish extension effects from application errors.
 - OAuth storage/state/error cases are automated; live authorization depends on each target server's OAuth registration and CORS configuration. No third-party account authorization was performed as part of these tests.
 
-Reproduce native testing with `CHROME_BIN=/path/to/actual/chrome npm run test:native`. This launches and closes a temporary browser; do not point it at a wrapper that opens your daily profile.
+Reproduce native testing with `CHROME_BIN=/path/to/actual/chrome bun run test:native`. This launches and closes a temporary browser; do not point it at a wrapper that opens your daily profile.
 
-Reproduce consumer installation with a local dev server running and `npm run test:registry`, or set `REGISTRY_ORIGIN=https://ui.fabrials.com` to check the published registry.
+Reproduce consumer installation with a local dev server running and `bun run test:registry`, or set `REGISTRY_ORIGIN=https://ui.fabrials.com` to check the published registry.
