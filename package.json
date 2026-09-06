@@ -12,7 +12,9 @@
     "check": "tsc --noEmit && eslint .",
     "test": "vitest run",
     "test:registry": "tsx scripts/smoke-registry.ts",
-    "test:native": "tsx scripts/native-webmcp.ts"
+    "test:native": "tsx scripts/native-webmcp.ts",
+    "video:record": "tsx scripts/record-demo.ts",
+    "video:publish": "tsx scripts/publish-demo.ts"
   },
   "dependencies": {
     "@base-ui/react": "^1.8.0",

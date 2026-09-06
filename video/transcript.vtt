@@ -1,0 +1,25 @@
+WEBVTT
+
+00:00.000 --> 00:08.000
+One interface for people and agents.
+Built with React and shadcn.
+
+00:08.000 --> 00:22.000
+Search, filter and select projects.
+Familiar controls update shared application state.
+
+00:22.000 --> 00:36.000
+Run a labeled simulation.
+A structured tool updates the same table and returns its result.
+
+00:36.000 --> 00:49.000
+Execute a native WebMCP tool in Chrome.
+Experimental WebMCP support is enabled for this scene.
+
+00:49.000 --> 01:02.000
+Connect to the included MCP server.
+Discover a tool, run it and inspect its real response.
+
+01:02.000 --> 01:10.000
+Install the components with Bun.
+Your application owns the code. ui.fabrials.com

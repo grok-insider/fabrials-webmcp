@@ -16,3 +16,10 @@
 Reproduce native testing with `CHROME_BIN=/path/to/actual/chrome bun run test:native`. This launches and closes a temporary browser; do not point it at a wrapper that opens your daily profile.
 
 Reproduce consumer installation with a local dev server running and `bun run test:registry`, or set `REGISTRY_ORIGIN=https://ui.fabrials.com` to check the published registry.
+
+## UI polish and video — 2026-09-06
+
+- Phase 1 (`910e584`): real GitHub stars (including zero), resilient API/cache fallback, responsive command wrapping and exact clipboard copy. Verified at 390/768/1440 px; 24 tests and build passed.
+- Phase 2 (`e93ca97`): explicit manual/simulator/native results, repeat-call feedback, complete reset and accessible shadcn selection. 27 tests, production build and native Chrome flows passed.
+- Phase 3: on-demand player with retry, captions/transcript and download; S3 allowlisted streaming with HEAD and byte ranges. 32 tests and production build passed. Clean Bun registry consumers build in Next.js and Vite. Real production-mode playback and seeking to 55 seconds passed without page errors. The rclone partial-response status is normalized to HTTP 206.
+- Video capture assertions verify actual manual filters, repeated simulations, native Chrome execution and MCP results. Final MP4: 70 seconds, 1920×1080, 30 fps, H.264, no audio. MP4/poster/VTT PUT and HEAD checks passed on house S3; reproducible sources live in `video/` and `scripts/record-demo.ts`.

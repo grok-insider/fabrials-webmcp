@@ -1,3 +1,4 @@
+import { DemoVideo } from "@/components/demo-video";
 import Link from "next/link";
 import {
   ArrowRight,
@@ -48,6 +49,12 @@ export default function Home() {
             >
               Explore examples
             </Link>
+            <a
+              href="#demo-video"
+              className="inline-flex min-h-10 items-center gap-2 text-sm underline underline-offset-4"
+            >
+              Watch demo <span aria-hidden="true">↗</span>
+            </a>
           </div>
         </div>
         <div className="hidden rounded-xl border bg-card p-7 lg:block">
@@ -128,6 +135,7 @@ export default function Home() {
           <ExplorerDemo compact />
         </div>
       </section>
+      <DemoVideo />
       <section className="border-t py-14">
         <div className="mb-8 flex items-end justify-between">
           <div>

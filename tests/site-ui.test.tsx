@@ -1,13 +1,15 @@
 // @vitest-environment jsdom
 import { afterEach, expect, it, vi } from "vitest";
-import { cleanup, render, screen } from "@testing-library/react";
+import { cleanup, render, screen, fireEvent } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import { CodeBlock } from "@/components/code-block";
 import { GitHubLink } from "@/components/github-link";
+import { DemoVideo } from "@/components/demo-video";
 import { GET } from "@/app/api/github/route";
 afterEach(() => {
   cleanup();
   vi.unstubAllGlobals();
+  vi.restoreAllMocks();
 });
 it("copies the original command and announces success", async () => {
   const user = userEvent.setup();
@@ -52,4 +54,24 @@ it("renders an accessible GitHub link with the real zero count", async () => {
   expect(
     await screen.findByRole("link", { name: "GitHub repository · 0 stars" }),
   ).toBeTruthy();
+});
+
+it("loads video only on demand and offers a recoverable playback failure", async () => {
+  const user = userEvent.setup();
+  const play = vi
+    .spyOn(HTMLMediaElement.prototype, "play")
+    .mockRejectedValueOnce(new Error("offline"))
+    .mockResolvedValue();
+  render(<DemoVideo />);
+  const video = document.querySelector("video")!;
+  expect(video.preload).toBe("none");
+  expect(play).not.toHaveBeenCalled();
+  await user.click(screen.getByRole("button", { name: "Play demo video" }));
+  expect(screen.getByRole("alert")).toBeTruthy();
+  await user.click(screen.getByRole("button", { name: "Retry" }));
+  expect(play).toHaveBeenCalledTimes(2);
+  expect(screen.queryByRole("alert")).toBeNull();
+  expect(video.controls).toBe(true);
+  fireEvent.error(video);
+  expect(screen.getByRole("alert")).toBeTruthy();
 });
