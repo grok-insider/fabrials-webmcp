@@ -1,6 +1,7 @@
 "use client";
 import { useId, useMemo, useState, type ReactNode } from "react";
 import { ArrowDown, ArrowUp, Search } from "lucide-react";
+import { Checkbox } from "@/components/ui/checkbox";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import {
@@ -158,18 +159,17 @@ export function DataTable<T extends { id: string }>({
               >
                 {onSelectionChange && (
                   <TableCell>
-                    <input
-                      type="checkbox"
+                    <Checkbox
                       aria-label={`Select ${row.id}`}
                       checked={selected.includes(row.id)}
-                      onChange={(e) =>
+                      onCheckedChange={(checked) =>
                         onSelectionChange(
-                          e.target.checked
+                          checked
                             ? [...selected, row.id]
                             : selected.filter((id) => id !== row.id),
                         )
                       }
-                      className="size-4 accent-current"
+                      className="size-4"
                     />
                   </TableCell>
                 )}
@@ -195,7 +195,10 @@ export function DataTable<T extends { id: string }>({
       </div>
       <div className="flex items-center justify-between text-xs text-muted-foreground">
         <span role="status">
-          {rows.length} records
+          {rows.length === 0
+            ? "0"
+            : `${current * size + 1}–${Math.min((current + 1) * size, rows.length)}`}{" "}
+          of {rows.length} records
           {selected.length > 0 ? ` · ${selected.length} selected` : ""}
         </span>
         <div className="flex items-center gap-3">

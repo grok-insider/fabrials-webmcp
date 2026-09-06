@@ -11,7 +11,7 @@ export function SupportBadge({
     checking: "Checking browser…",
     native: "WebMCP available",
     legacy: "WebMCP · legacy API",
-    unsupported: "Manual mode · WebMCP unavailable",
+    unsupported: "Native WebMCP unavailable",
   };
   return (
     <div className="space-y-2">

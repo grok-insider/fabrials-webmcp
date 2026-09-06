@@ -1,6 +1,12 @@
 "use client";
 import { useState } from "react";
-import { ArrowRight, Braces } from "lucide-react";
+import {
+  ArrowRight,
+  Braces,
+  RotateCcw,
+  Check,
+  LoaderCircle,
+} from "lucide-react";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -25,6 +31,7 @@ const MCPDashboard = dynamic(() =>
   import("@/registry/components/mcp-dashboard").then((m) => m.MCPDashboard),
 );
 import { ArgumentsForm } from "@/registry/components/arguments-form";
+import { errorMessage } from "@/registry/mcp/types";
 import type { ToolDefinition } from "@/registry/mcp/types";
 export const projects = [
   { id: "01", name: "WebMCP", category: "Browser", status: "Preview" },
@@ -44,6 +51,30 @@ function Explorer({ compact = false }: { compact?: boolean }) {
   const [category, setCategory] = useState("");
   const [selected, setSelected] = useState<string[]>([]);
   const mcp = useWebMCP();
+  const [error, setError] = useState("");
+  const [resetKey, setResetKey] = useState(0);
+  const last = mcp.executions[0];
+  const run = async (
+    name: string,
+    args: Record<string, unknown>,
+    source: "human" | "simulator" = "human",
+  ) => {
+    setError("");
+    try {
+      await mcp.run(name, args, source);
+    } catch (e) {
+      setError(errorMessage(e));
+    }
+  };
+  const reset = () => {
+    for (const execution of mcp.executions) mcp.cancel(execution.id);
+    setQuery("");
+    setCategory("");
+    setSelected([]);
+    setError("");
+    setResetKey((k) => k + 1);
+    mcp.clearHistory();
+  };
   useWebMCPTool({
     name: "filter_projects",
     title: "Filter projects",
@@ -101,23 +132,25 @@ function Explorer({ compact = false }: { compact?: boolean }) {
         <div>
           <p className="text-sm font-medium">Project explorer</p>
           <p className="mt-1 text-xs text-muted-foreground">
-            One interface. Two ways to interact.
+            Interactive demo · shared state for people and agents.
           </p>
         </div>
         <SupportBadge support={mcp.support} error={mcp.error} />
       </div>
+      {mcp.support === "unsupported" && (
+        <p className="text-xs leading-5 text-muted-foreground">
+          Try the controls or run a simulated tool below. Native agent access
+          needs a browser with WebMCP enabled.
+        </p>
+      )}
       <SearchFilter
         query={query}
         onQueryChange={(q) => {
-          void mcp
-            .run("filter_projects", { query: q, category })
-            .catch(() => {});
+          void run("filter_projects", { query: q, category });
         }}
         filter={category}
         onFilterChange={(c) => {
-          void mcp
-            .run("filter_projects", { query, category: c })
-            .catch(() => {});
+          void run("filter_projects", { query, category: c });
         }}
         options={["Browser", "Protocol", "Interface"].map((x) => ({
           value: x,
@@ -125,6 +158,7 @@ function Explorer({ compact = false }: { compact?: boolean }) {
         }))}
       />
       <DataTable
+        key={resetKey}
         rows={rows}
         pageSize={compact ? 4 : 5}
         columns={[
@@ -145,28 +179,82 @@ function Explorer({ compact = false }: { compact?: boolean }) {
         ]}
         selected={selected}
         onSelectionChange={(ids) => {
-          void mcp.run("select_projects", { ids }).catch(() => {});
+          void run("select_projects", { ids });
         }}
       />
-      <div className="flex flex-wrap items-center gap-3 rounded-lg bg-muted/55 p-3">
-        <Braces className="size-4 text-muted-foreground" />
-        <code className="flex-1 text-[11px]">
-          filter_projects({`{ query: "", category: "Browser" }`})
-        </code>
-        <Button
-          size="xs"
-          variant="outline"
-          onClick={() =>
-            void mcp.run(
-              "filter_projects",
-              { query: "", category: "Browser" },
-              "simulator",
-            )
-          }
+      <div className="overflow-hidden rounded-xl border bg-muted/25">
+        <div className="flex flex-wrap items-center justify-between gap-3 border-b px-4 py-3">
+          <span className="inline-flex items-center gap-2 text-xs font-medium">
+            <Braces className="size-4 text-muted-foreground" /> Simulated tool
+          </span>
+          <Button size="sm" variant="ghost" onClick={reset}>
+            <RotateCcw className="size-3.5" />
+            Reset demo
+          </Button>
+        </div>
+        <div className="space-y-4 p-4">
+          <code className="block whitespace-pre-wrap font-mono text-xs leading-6 [overflow-wrap:anywhere]">
+            filter_projects({`{ query: "", category: "Browser" }`})
+          </code>
+          <Button
+            size="sm"
+            variant="outline"
+            disabled={last?.status === "running"}
+            onClick={() =>
+              void run(
+                "filter_projects",
+                { query: "", category: "Browser" },
+                "simulator",
+              )
+            }
+          >
+            {last?.status === "running" ? (
+              <LoaderCircle className="size-3.5 animate-spin" />
+            ) : (
+              <ArrowRight className="size-3.5" />
+            )}
+            {last?.status === "running" ? "Running…" : "Run simulated tool"}
+          </Button>
+        </div>
+        <div
+          role="status"
+          aria-live="polite"
+          aria-atomic="true"
+          className="border-t bg-background/60 px-4 py-3 text-xs leading-5"
         >
-          Simulate tool call <ArrowRight />
-        </Button>
+          {last ? (
+            <div key={last.id} className="space-y-2">
+              <p className="flex flex-wrap items-center gap-2 font-medium">
+                <Check aria-hidden="true" className="size-3.5" />
+                {last.source === "human"
+                  ? "Manual"
+                  : last.source === "agent"
+                    ? "Native agent"
+                    : "Simulator"}{" "}
+                · {last.status} · Call {mcp.executions.length}
+              </p>
+              <code className="block text-muted-foreground [overflow-wrap:anywhere]">
+                {last.name}({JSON.stringify(last.args)})
+              </code>
+              <p className="font-mono [overflow-wrap:anywhere]">
+                {last.error ||
+                  JSON.stringify(last.result) ||
+                  "Waiting for result…"}
+              </p>
+            </div>
+          ) : (
+            <p className="text-muted-foreground">
+              Run the tool to filter the table to Browser projects. The result
+              will appear here.
+            </p>
+          )}
+        </div>
       </div>
+      {error && (
+        <p role="alert" className="text-xs text-destructive">
+          {error}
+        </p>
+      )}
       {!compact && (
         <ExecutionLog
           executions={mcp.executions}
