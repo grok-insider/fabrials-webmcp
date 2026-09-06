@@ -36,6 +36,8 @@ it("streams ranges and preserves seeking and download headers", async () => {
     "demo.mp4",
   );
   expect(response.status).toBe(206);
+  expect(response.headers.get("content-encoding")).toBe("identity");
+  expect(response.headers.get("cache-control")).toContain("no-transform");
   expect(response.headers.get("content-range")).toBe("bytes 0-1/100");
   expect(response.headers.get("content-disposition")).toContain("attachment");
   expect((await response.arrayBuffer()).byteLength).toBe(2);

@@ -38,7 +38,7 @@ export function DemoVideo() {
           </p>
         </div>
         <a
-          href="/api/demo-media/demo.mp4?v=1&download=1"
+          href="/api/demo-media/demo.mp4?v=2&download=1"
           className="inline-flex min-h-10 items-center gap-2 text-sm underline underline-offset-4"
         >
           <Download className="size-4" />
@@ -52,15 +52,15 @@ export function DemoVideo() {
           controls={started}
           playsInline
           preload="none"
-          poster="/api/demo-media/poster.jpg?v=1"
+          poster="/api/demo-media/poster.jpg?v=2"
           aria-label="Fabrials UI demonstration: manual controls, simulated tools, native WebMCP and remote MCP"
           onPlay={() => setStarted(true)}
           onError={() => setError(true)}
         >
-          <source src="/api/demo-media/demo.mp4?v=1" type="video/mp4" />
+          <source src="/api/demo-media/demo.mp4?v=2" type="video/mp4" />
           <track
             kind="captions"
-            src="/api/demo-media/transcript.vtt?v=1"
+            src="/api/demo-media/transcript.vtt?v=2"
             srcLang="en"
             label="English"
           />

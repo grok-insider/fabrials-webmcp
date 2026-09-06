@@ -98,9 +98,12 @@ export async function serveDemoMedia(request: Request, asset: string) {
     const headers = new Headers({
       "Content-Type": entry.type,
       "Accept-Ranges": "bytes",
+      "Content-Encoding": "identity",
       "X-Content-Type-Options": "nosniff",
       "Cache-Control":
-        upstream.status === 416 ? "no-store" : "public, max-age=86400",
+        upstream.status === 416
+          ? "no-store"
+          : "public, max-age=86400, no-transform",
     });
     for (const key of [
       "content-length",
