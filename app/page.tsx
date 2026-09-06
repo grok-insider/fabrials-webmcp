@@ -100,11 +100,11 @@ export default function Home() {
             </h2>
           </div>
           <p className="max-w-sm text-sm leading-6 text-muted-foreground">
-            Compare a setup yourself, or try a guided tool call. See the
-            evidence, build a selection, and make the final decision.
+            Play the narrated walkthrough, then take over or connect your own
+            agent. Explore the same interface, with the same shared state.
           </p>
         </div>
-        <CoffeeDemo />
+        <CoffeeDemo tour />
         <div className="mt-5 flex flex-wrap items-center justify-between gap-3 text-xs text-muted-foreground">
           <p>
             Powered by the WebMCP provider, Comparison and Confirmation dialog.

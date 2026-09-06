@@ -1,3 +1,4 @@
+import { execFileSync } from "node:child_process";
 import { bundle } from "@remotion/bundler";
 import {
   selectComposition,
@@ -67,5 +68,18 @@ if (frames) {
     output: resolve("artifacts/remotion-film/poster.jpg"),
     imageFormat: "jpeg",
   });
+  execFileSync("ffmpeg", [
+    "-v",
+    "error",
+    "-i",
+    "artifacts/remotion-film/demo.mp4",
+    "-vn",
+    "-c:a",
+    "copy",
+    "-movflags",
+    "+faststart",
+    "-y",
+    "artifacts/remotion-film/demo-audio.m4a",
+  ]);
   console.log("Remotion film complete");
 }

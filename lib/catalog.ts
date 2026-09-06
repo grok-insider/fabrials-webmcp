@@ -396,6 +396,7 @@ export const guides = [
   { slug: "introduction", title: "Introduction" },
   { slug: "installation", title: "Installation" },
   { slug: "webmcp", title: "WebMCP integration" },
+  { slug: "interactive-demo", title: "Interactive demo" },
   { slug: "authentication", title: "OAuth & connections" },
   { slug: "server", title: "Server connector" },
   { slug: "compatibility", title: "Compatibility" },

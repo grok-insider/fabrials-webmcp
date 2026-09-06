@@ -1,5 +1,5 @@
 "use client";
-import { useRef, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import {
   ArrowRight,
   Check,
@@ -26,20 +26,36 @@ import {
   coffeeTotal,
   type CoffeeId,
 } from "@/lib/coffee-demo";
+import { CoffeeTour } from "@/components/coffee-tour";
+import { LiveDemoConnection } from "@/components/live-demo-connection";
+import { tourSnapshot, tourTarget } from "@/lib/coffee-tour";
 const money = (n: number) =>
   new Intl.NumberFormat("en", {
     style: "currency",
     currency: "EUR",
     maximumFractionDigits: 0,
   }).format(n);
-export function CoffeeDemo() {
+export function CoffeeDemo({ tour = false }: { tour?: boolean }) {
   return (
     <WebMCPProvider>
-      <CoffeeWorkbench />
+      <CoffeeWorkbench tour={tour} />
     </WebMCPProvider>
   );
 }
-function CoffeeWorkbench() {
+function CoffeeWorkbench({ tour }: { tour: boolean }) {
+  const [mode, setMode] = useState<"automatic" | "manual">(
+    tour ? "automatic" : "manual",
+  );
+  const [time, setTime] = useState(0);
+  const [playing, setPlaying] = useState(false);
+  const [follow, setFollow] = useState(true);
+  const container = useRef<HTMLDivElement>(null);
+  const focusTarget = mode === "automatic" ? tourTarget(time) : "";
+
+  const takeControl = useCallback(() => {
+    setMode("manual");
+    setPlaying(false);
+  }, []);
   const mcp = useWebMCP();
   const [width, setWidth] = useState(32);
   const [fitting, setFitting] = useState("58 mm");
@@ -61,6 +77,49 @@ function CoffeeWorkbench() {
   const [saved, setSaved] = useState(false);
   const [error, setError] = useState("");
   const [busy, setBusy] = useState(false);
+  const snapshotKey = JSON.stringify(tourSnapshot(time));
+  useEffect(() => {
+    if (mode !== "automatic") return;
+    const state = JSON.parse(snapshotKey) as ReturnType<typeof tourSnapshot>;
+    setWidth(32);
+    setFitting("58 mm");
+    setCompared(state.compared ? { width: 32, fitting: "58 mm" } : null);
+    const next = { id: state.id, filter: state.filter };
+    cartRef.current = next;
+    setCart(next);
+    setReview(state.review);
+    setSaved(false);
+  }, [snapshotKey, mode]);
+  useEffect(() => {
+    if (!playing || !follow || !focusTarget || !container.current) return;
+    const frame = requestAnimationFrame(() => {
+      const root = container.current!;
+      const bounds = root.getBoundingClientRect();
+      if (bounds.bottom < 68 || bounds.top > innerHeight) return;
+      const targets = [
+        ...root.querySelectorAll<HTMLElement>(
+          `[data-tour-target="${focusTarget}"]`,
+        ),
+      ];
+      const target = targets.filter((el) => el.getClientRects().length).at(-1);
+      if (!target) return;
+      const rect = target.getBoundingClientRect();
+      const top =
+        68 +
+        (root.querySelector("[data-tour-controls]")?.getBoundingClientRect()
+          .height ?? 0) +
+        24;
+      if (rect.top < top || rect.bottom > innerHeight - 24)
+        window.scrollBy({
+          top:
+            rect.top - top - Math.max(0, (innerHeight - top - rect.height) / 2),
+          behavior: matchMedia("(prefers-reduced-motion: reduce)").matches
+            ? "instant"
+            : "smooth",
+        });
+    });
+    return () => cancelAnimationFrame(frame);
+  }, [focusTarget, playing, follow, review]);
   const results = compared
     ? compareCoffee(compared.width, compared.fitting)
     : [];
@@ -72,6 +131,7 @@ function CoffeeWorkbench() {
     args: Record<string, unknown>,
     source: "human" | "simulator" = "human",
   ) {
+    takeControl();
     setError("");
     setBusy(true);
     try {
@@ -96,7 +156,8 @@ function CoffeeWorkbench() {
       required: ["maxWidth", "fitting"],
       additionalProperties: false,
     },
-    execute: (args) => {
+    execute: (args, context) => {
+      if (context.source === "agent") takeControl();
       const maxWidth = Number(args.maxWidth);
       const fit = String(args.fitting);
       setWidth(maxWidth);
@@ -118,7 +179,8 @@ function CoffeeWorkbench() {
       required: ["productId"],
       additionalProperties: false,
     },
-    execute: (args) => {
+    execute: (args, context) => {
+      if (context.source === "agent") takeControl();
       const id = (args.productId || null) as CoffeeId | null;
       updateCart({ id, filter: false });
       return {
@@ -140,7 +202,8 @@ function CoffeeWorkbench() {
         required: ["included"],
         additionalProperties: false,
       },
-      execute: (args) => {
+      execute: (args, context) => {
+        if (context.source === "agent") takeControl();
         const current = cartRef.current;
         if (!current.id) throw Error("Choose a machine first.");
         const next = { ...current, filter: Boolean(args.included) };
@@ -165,7 +228,8 @@ function CoffeeWorkbench() {
         properties: {},
         additionalProperties: false,
       },
-      execute: () => {
+      execute: (_args, context) => {
+        if (context.source === "agent") takeControl();
         if (!cartRef.current.id) throw Error("Choose a machine first.");
         setReview(true);
         return { status: "awaiting_user_review", orderPlaced: false };
@@ -173,8 +237,36 @@ function CoffeeWorkbench() {
     },
     Boolean(cart.id),
   );
+  useWebMCPTool(
+    {
+      name: "get_coffee_state",
+      title: "Read the coffee demo",
+      description:
+        "Read the current constraints, comparison and cart in this tab.",
+      inputSchema: {
+        type: "object",
+        properties: {},
+        additionalProperties: false,
+      },
+      execute: () => ({
+        width,
+        fitting,
+        compared,
+        cart: cartRef.current,
+        total: coffeeTotal(cartRef.current.id, cartRef.current.filter),
+        review,
+        products: coffeeProducts,
+        orderPlaced: false,
+      }),
+    },
+    tour,
+  );
   return (
-    <div className="overflow-hidden rounded-[1.5rem] border bg-card shadow-[0_20px_70px_-45px_#25311b55]">
+    <div
+      ref={container}
+      data-tour-focus={focusTarget}
+      className="coffee-workbench overflow-clip rounded-[1.5rem] border bg-card shadow-[0_20px_70px_-45px_#25311b55]"
+    >
       <div className="flex flex-wrap items-center justify-between gap-3 border-b px-5 py-4 sm:px-7">
         <div className="flex items-center gap-3">
           <span className="grid size-8 place-items-center rounded-lg bg-foreground text-background">
@@ -187,17 +279,50 @@ function CoffeeWorkbench() {
             </p>
           </div>
         </div>
-        <div className="flex items-center gap-3">
-          <span className="text-xs text-muted-foreground">
-            {mcp.support === "native"
-              ? `${mcp.tools.length} browser tools`
-              : "Manual + simulation"}
+        <div className="flex flex-wrap items-center gap-3">
+          {tour && (
+            <div
+              className="flex gap-1 rounded-lg border p-1"
+              role="group"
+              aria-label="Demo mode"
+            >
+              <Button
+                size="sm"
+                variant={mode === "automatic" ? "secondary" : "ghost"}
+                aria-pressed={mode === "automatic"}
+                onClick={() => {
+                  if (mode !== "automatic") {
+                    setTime(0);
+                    setMode("automatic");
+                    mcp.clearHistory();
+                  }
+                }}
+              >
+                Automatic
+              </Button>
+              <Button
+                size="sm"
+                variant={mode === "manual" ? "secondary" : "ghost"}
+                aria-pressed={mode === "manual"}
+                onClick={takeControl}
+              >
+                Manual
+              </Button>
+            </div>
+          )}
+          <span className="hidden text-xs text-muted-foreground sm:inline">
+            {mode === "automatic"
+              ? "Audio-guided demo"
+              : mcp.support === "native"
+                ? `${mcp.tools.length} browser tools`
+                : "Manual + simulation"}
           </span>
           <Button
             variant="ghost"
             size="icon-sm"
             aria-label="Reset coffee demo"
             onClick={() => {
+              takeControl();
               updateCart({ id: null, filter: false });
               setCompared(null);
               setWidth(32);
@@ -211,7 +336,30 @@ function CoffeeWorkbench() {
           </Button>
         </div>
       </div>
-      <div className="grid lg:grid-cols-[1fr_320px]">
+      {tour && mode === "automatic" && (
+        <CoffeeTour
+          follow={follow}
+          onFollow={setFollow}
+          time={time}
+          onTime={setTime}
+          onPlaying={setPlaying}
+          onManual={takeControl}
+        />
+      )}
+      {tour && mode === "manual" && (
+        <div className="border-b p-5 sm:px-7">
+          <LiveDemoConnection />
+        </div>
+      )}
+      <div
+        className="grid lg:grid-cols-[1fr_320px]"
+        onPointerDownCapture={() => {
+          if (mode === "automatic") takeControl();
+        }}
+        onKeyDownCapture={() => {
+          if (mode === "automatic") takeControl();
+        }}
+      >
         <div className="min-w-0 p-5 sm:p-7">
           <div className="mb-6 flex flex-wrap items-end justify-between gap-4">
             <div>
@@ -256,6 +404,7 @@ function CoffeeWorkbench() {
               </select>
             </div>
             <Button
+              data-tour-target="compare"
               variant="outline"
               disabled={busy}
               onClick={() =>
@@ -295,6 +444,7 @@ function CoffeeWorkbench() {
               ),
               action: (
                 <Button
+                  data-tour-target={p.id === "studio" ? "choose" : undefined}
                   size="sm"
                   variant={cart.id === p.id ? "secondary" : "outline"}
                   disabled={busy}
@@ -373,18 +523,24 @@ function CoffeeWorkbench() {
         >
           <div className="mb-4 flex items-center justify-between">
             <span className="flex items-center gap-2 text-xs font-medium">
-              <Braces className="size-4" /> Try a tool
+              <Braces className="size-4" />{" "}
+              {mode === "automatic" ? "Follow the tour" : "Try a tool"}
             </span>
             <span className="rounded-full border px-2 py-1 text-[10px] text-muted-foreground">
-              Simulation
+              {mode === "automatic"
+                ? playing
+                  ? "Playing"
+                  : "Paused"
+                : "Simulation"}
             </span>
           </div>
           <p className="text-lg leading-7 tracking-tight">
             “Two flat whites. A 32 cm counter. Keep my 58 mm accessories.”
           </p>
           <p className="mt-3 text-xs leading-5 text-muted-foreground">
-            This guided call uses the same tools as a browser agent. No AI
-            connection required.
+            {mode === "automatic"
+              ? "A scripted walkthrough of the live interface. Touch any control to take over."
+              : "This guided call uses the same tools as a browser agent. No AI connection required."}
           </p>
           <Button
             className="mt-5 w-full"
@@ -405,7 +561,7 @@ function CoffeeWorkbench() {
             <ShoppingBag className="size-4" />
           </div>
           {active ? (
-            <div className="mt-4 space-y-4">
+            <div className="coffee-cart-entry mt-4 space-y-4">
               <div className="flex justify-between gap-2 text-sm">
                 <span>{active.name}</span>
                 <span>{money(active.price)}</span>
@@ -415,6 +571,7 @@ function CoffeeWorkbench() {
                 onClick={() =>
                   void run("set_coffee_filter", { included: !cart.filter })
                 }
+                data-tour-target="filter"
                 aria-pressed={cart.filter}
               >
                 <span>
@@ -434,6 +591,7 @@ function CoffeeWorkbench() {
                 <span>{money(total)}</span>
               </div>
               <Button
+                data-tour-target="review"
                 variant="outline"
                 className="w-full"
                 onClick={() => void run("review_coffee_cart", {})}
@@ -474,7 +632,7 @@ function CoffeeWorkbench() {
                     <div className="mb-1 flex justify-between text-[10px] uppercase tracking-wide text-muted-foreground">
                       <span>
                         {e.source === "agent"
-                          ? "Browser agent"
+                          ? "Agent"
                           : e.source === "simulator"
                             ? "Simulation"
                             : "You"}
@@ -494,8 +652,30 @@ function CoffeeWorkbench() {
           )}
         </aside>
       </div>
+      {mode === "automatic" && review && (
+        <section
+          data-tour-target="review"
+          className="coffee-cart-entry border-t bg-muted/40 p-6"
+          aria-label="Guided selection review"
+        >
+          <p className="font-medium">Your morning setup</p>
+          <div className="my-3 flex justify-between text-sm">
+            <span>
+              {active?.name}
+              {cart.filter ? " + water filter" : ""}
+            </span>
+            <strong>{money(total)}</strong>
+          </div>
+          <p className="mb-4 text-sm text-muted-foreground">
+            The agent prepares the selection. You make the final decision.
+          </p>
+          <Button variant="outline" onClick={takeControl}>
+            Take control to review
+          </Button>
+        </section>
+      )}
       <ConfirmationDialog
-        open={review}
+        open={review && mode === "manual"}
         onOpenChange={setReview}
         title="Your morning setup"
         description="Review your selection. This example saves a local demo state only; no order or payment is created."

@@ -201,3 +201,30 @@
 html {
   scroll-padding-top: 100px;
 }
+
+.coffee-workbench[data-tour-focus="compare"] [data-tour-target="compare"],
+.coffee-workbench[data-tour-focus="choose"] [data-tour-target="choose"],
+.coffee-workbench[data-tour-focus="filter"] [data-tour-target="filter"],
+.coffee-workbench[data-tour-focus="review"] [data-tour-target="review"] {
+  outline: 2px solid var(--foreground);
+  outline-offset: 5px;
+  box-shadow: 0 0 0 8px var(--muted);
+}
+.coffee-workbench [data-tour-target] {
+  transition:
+    box-shadow 0.25s,
+    outline-offset 0.25s;
+}
+@keyframes coffee-enter {
+  from {
+    opacity: 0;
+    transform: translateY(8px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+.coffee-cart-entry {
+  animation: coffee-enter 0.35s ease-out;
+}

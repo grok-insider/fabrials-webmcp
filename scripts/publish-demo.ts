@@ -24,6 +24,7 @@ if (process.env.PUBLISH_SOURCES === "1") {
   }
 }
 for (const [name, entry] of Object.entries(assets)) {
+  if (process.env.PUBLISH_ASSET && name !== process.env.PUBLISH_ASSET) continue;
   const body = await readFile(`${directory}/${name}`);
   const signed = signMediaRequest(config, entry.key, "PUT", body);
   const response = await fetch(signed.url, {

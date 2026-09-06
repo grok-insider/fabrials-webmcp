@@ -50,6 +50,7 @@ Browse the [component catalog](https://ui.fabrials.com/components) or explore [c
 ## Guides
 - https://ui.fabrials.com/docs/installation
 - https://ui.fabrials.com/docs/webmcp
+- https://ui.fabrials.com/docs/interactive-demo
 - https://ui.fabrials.com/docs/authentication
 - https://ui.fabrials.com/docs/server
 - https://ui.fabrials.com/docs/compatibility
