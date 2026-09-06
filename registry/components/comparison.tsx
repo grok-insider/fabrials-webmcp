@@ -42,7 +42,9 @@ export function Comparison({
             className="overflow-hidden rounded-xl border bg-card"
           >
             <div className="flex items-center gap-4 p-4">
-              <div className="w-28 shrink-0">{column.visual}</div>
+              {column.visual && (
+                <div className="w-28 shrink-0">{column.visual}</div>
+              )}
               <div>
                 <h4 className="text-lg font-medium">{column.title}</h4>
                 <p className="text-sm text-muted-foreground">

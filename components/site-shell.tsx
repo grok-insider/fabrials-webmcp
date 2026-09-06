@@ -35,7 +35,7 @@ export function SiteHeader() {
   useEffect(() => setMenu(false), [path]);
   return (
     <header className="sticky top-0 z-40 border-b bg-background/95 backdrop-blur-sm">
-      <div className="mx-auto flex h-17 max-w-7xl items-center justify-between gap-5 px-6 lg:px-10">
+      <div className="mx-auto flex h-17 max-w-[1600px] items-center justify-between gap-5 px-6 lg:px-10">
         <Link
           href="/"
           className="flex items-center gap-2.5 font-medium tracking-tight"
@@ -55,7 +55,7 @@ export function SiteHeader() {
           <Link
             href="/docs/introduction"
             className={
-              path.startsWith("/docs")
+              guides.some((guide) => path === `/docs/${guide.slug}`)
                 ? "text-foreground"
                 : "text-muted-foreground hover:text-foreground"
             }
@@ -63,15 +63,21 @@ export function SiteHeader() {
             Documentation
           </Link>
           <Link
-            href="/docs/tool-catalog"
-            className="text-muted-foreground hover:text-foreground"
+            href="/components"
+            aria-current={path === "/components" ? "page" : undefined}
+            className={
+              path === "/components" ||
+              catalog.some((item) => path === `/docs/${item.slug}`)
+                ? "text-foreground"
+                : "text-muted-foreground hover:text-foreground"
+            }
           >
             Components
           </Link>
           <Link
             href="/examples"
             className={
-              path === "/examples"
+              path.startsWith("/examples")
                 ? "text-foreground"
                 : "text-muted-foreground hover:text-foreground"
             }
@@ -118,7 +124,7 @@ export function SiteHeader() {
           className="flex flex-col gap-4 border-t px-6 py-5 text-sm md:hidden"
         >
           <Link href="/docs/introduction">Documentation</Link>
-          <Link href="/docs/tool-catalog">Components</Link>
+          <Link href="/components">Components</Link>
           <Link href="/examples">Examples</Link>
         </nav>
       )}
@@ -129,7 +135,7 @@ export function DocsSidebar() {
   const path = usePathname();
   const [query, setQuery] = useState("");
   return (
-    <aside className="w-full shrink-0 lg:sticky lg:top-24 lg:h-[calc(100vh-7rem)] lg:w-54 lg:overflow-auto lg:pr-5">
+    <aside className="docs-sidebar w-full shrink-0 lg:sticky lg:top-24 lg:h-[calc(100dvh-7rem)] lg:w-52 lg:overflow-y-auto lg:pr-4">
       <details className="lg:hidden">
         <summary className="mb-4 rounded-md border p-3 text-sm">
           Browse documentation
@@ -154,6 +160,13 @@ export function DocsSidebar() {
   function SidebarContent() {
     return (
       <nav aria-label="Documentation">
+        <Link
+          href="/components"
+          aria-current={path === "/components" ? "page" : undefined}
+          className={`mb-6 block rounded-md px-2 py-2 text-sm ${path === "/components" ? "bg-muted font-medium" : "text-muted-foreground hover:text-foreground"}`}
+        >
+          All components
+        </Link>
         <div className="mb-7">
           <p className="mb-3 px-2 text-[11px] font-medium uppercase tracking-[.12em] text-muted-foreground">
             Get started
@@ -205,7 +218,7 @@ export function DocsSidebar() {
 export function SiteFooter() {
   return (
     <footer className="border-t">
-      <div className="mx-auto flex max-w-7xl flex-wrap items-center justify-between gap-4 px-6 py-8 text-xs text-muted-foreground lg:px-10">
+      <div className="mx-auto flex max-w-[1600px] flex-wrap items-center justify-between gap-4 px-6 py-8 text-xs text-muted-foreground lg:px-10">
         <p>
           Made at{" "}
           <a

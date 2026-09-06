@@ -3,6 +3,8 @@
 React 19 / Tailwind 4 / shadcn Base UI registry. MIT.
 MCP target: 2026-07-28. WebMCP is a browser proposal, distinct from remote MCP.
 
+Browse the [component catalog](https://ui.fabrials.com/components) or explore [complete examples](https://ui.fabrials.com/examples).
+
 ## Components
 - [Comparison](https://ui.fabrials.com/docs/comparison): Show choices side by side and highlight the evidence behind a recommendation.
   Install: bunx shadcn@latest add https://ui.fabrials.com/r/comparison.json

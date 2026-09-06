@@ -34,13 +34,17 @@ export default async function Docs({
   if (item) source = await readFile(item.files[0], "utf8");
   const mdx = await readFile(`content/${slug}.mdx`, "utf8").catch(() => "");
   return (
-    <main
-      id="main-content"
-      className="mx-auto flex max-w-7xl flex-col items-start gap-8 px-6 py-10 lg:flex-row lg:gap-14 lg:px-10"
-    >
+    <main id="main-content" className="docs-layout">
       <DocsSidebar />
-      <article className="w-full min-w-0 flex-1 pb-16 lg:max-w-3xl">
-        <p className="mb-4 text-[11px] uppercase tracking-[.14em] text-muted-foreground">
+      <article className="w-full min-w-0 flex-1 pb-16 xl:max-w-4xl">
+        <p className="mb-4 flex items-center gap-2 text-xs text-muted-foreground">
+          <Link
+            href={item ? "/components" : "/docs/introduction"}
+            className="hover:text-foreground"
+          >
+            {item ? "Components" : "Guides"}
+          </Link>
+          <span aria-hidden="true">/</span>
           {item?.category ?? "Documentation"}
         </p>
         <h1 className="text-4xl font-medium tracking-[-.045em]">
@@ -62,16 +66,46 @@ export default async function Docs({
                 .
               </div>
             ) : (
-              <ComponentPreview slug={slug} source={source} />
+              <section
+                id="preview"
+                aria-label="Component preview"
+                className="scroll-mt-28"
+              >
+                <ComponentPreview slug={slug} source={source} />
+              </section>
             )}
-            <h2 className="mt-10 mb-4 text-xl font-medium tracking-tight">
+            {slug === "comparison" && (
+              <div className="mt-6 rounded-lg border bg-muted/30 p-5 text-sm leading-7">
+                <p className="font-medium">
+                  A component for comparing any set of options
+                </p>
+                <p className="text-muted-foreground">
+                  Columns, rows and optional highlights are controlled by your
+                  app. Product recommendations, cart state and tool registration
+                  belong to the example.
+                </p>
+                <Link
+                  href="/examples#comparison"
+                  className="mt-2 inline-block underline underline-offset-4"
+                >
+                  Explore the shopping example →
+                </Link>
+              </div>
+            )}
+            <h2
+              id="installation"
+              className="scroll-mt-28 mt-10 mb-4 text-xl font-medium tracking-tight"
+            >
               Installation
             </h2>
             <CodeBlock
               variant="command"
               code={`bunx shadcn@latest add https://ui.fabrials.com/r/${slug}.json`}
             />
-            <h2 className="mt-10 mb-4 text-xl font-medium tracking-tight">
+            <h2
+              id="api"
+              className="scroll-mt-28 mt-10 mb-4 text-xl font-medium tracking-tight"
+            >
               API
             </h2>
             <div className="overflow-x-auto rounded-lg border">
@@ -98,13 +132,19 @@ export default async function Docs({
                 </tbody>
               </table>
             </div>
-            <h2 className="mt-10 mb-4 text-xl font-medium tracking-tight">
+            <h2
+              id="behavior"
+              className="scroll-mt-28 mt-10 mb-4 text-xl font-medium tracking-tight"
+            >
               Behavior & compatibility
             </h2>
             <p className="text-sm leading-7 text-muted-foreground">
               {item.note}
             </p>
-            <h2 className="mt-8 mb-3 text-xl font-medium tracking-tight">
+            <h2
+              id="accessibility"
+              className="scroll-mt-28 mt-8 mb-3 text-xl font-medium tracking-tight"
+            >
               Accessibility
             </h2>
             <p className="text-sm leading-7 text-muted-foreground">
@@ -117,10 +157,37 @@ export default async function Docs({
         )}
         {mdx && (
           <div className="doc-prose">
-            <MDXRemote source={mdx} />
+            <MDXRemote
+              source={mdx}
+              components={{ pre: (props) => <pre {...props} tabIndex={0} /> }}
+            />
           </div>
         )}
       </article>
+      {item && (
+        <aside className="sticky top-28 hidden w-36 shrink-0 text-xs 2xl:block">
+          <nav aria-label="On this page" className="space-y-4">
+            <p className="font-medium">On this page</p>
+            {[
+              ["preview", "Preview"],
+              ["installation", "Installation"],
+              ["api", "API"],
+              ["behavior", "Behavior"],
+              ["accessibility", "Accessibility"],
+            ]
+              .filter(([id]) => id !== "preview" || slug !== "server-connector")
+              .map(([id, label]) => (
+                <a
+                  key={id}
+                  href={`#${id}`}
+                  className="block text-muted-foreground hover:text-foreground"
+                >
+                  {label}
+                </a>
+              ))}
+          </nav>
+        </aside>
+      )}
     </main>
   );
 }

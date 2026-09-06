@@ -180,3 +180,24 @@
     min-height: 44px;
   }
 }
+
+.docs-layout {
+  @apply mx-auto flex max-w-[1600px] flex-col items-start gap-8 px-6 py-10 lg:flex-row lg:gap-10 lg:px-10 lg:py-12 xl:gap-14;
+}
+.docs-sidebar {
+  scrollbar-width: thin;
+  scrollbar-color: var(--border) transparent;
+}
+.docs-sidebar::-webkit-scrollbar {
+  width: 5px;
+}
+.docs-sidebar::-webkit-scrollbar-thumb {
+  background: var(--border);
+  border-radius: 8px;
+}
+.docs-sidebar::-webkit-scrollbar-track {
+  background: transparent;
+}
+html {
+  scroll-padding-top: 100px;
+}

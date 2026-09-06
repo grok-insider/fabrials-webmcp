@@ -56,3 +56,12 @@ Reproduce consumer installation with a local dev server running and `bun run tes
 - Reviewed an animated 10.5-second selection clip and sequential frames across the product transfer. TypeScript/ESLint, 38 tests, production registry/site build and diff checks pass.
 - Final Remotion film: 65.685333 seconds, 1920×1080 H.264, 48 kHz AAC, 5,295,871 bytes. Existing Grok narration and music retained. Assets and audio/alignment sources PUT/HEAD verified in apps/videos/fabrials-ui/v4/. Player revision v=5.
 - Published commit 14d362a through Coolify lqjfzmwgirxsmleliwrok9jp (finished). Public v=5 Range response: 206, bytes 0-1023/5295871, Content-Length 1024. Chrome plays unmuted with decoded audio and no media error; seeking to 55.5 seconds succeeds. All 20 published registry items match the built local registry.
+
+## Component catalog and examples · 2026-09-07
+
+- Added /components as the actual destination of desktop/mobile Components navigation: 20 searchable entries, category sections, descriptions, result count and empty/reset state. Inspired by the shadcn component index, while preserving Fabrials typography and tokens.
+- Expanded documentation layout to 1600 px, added breadcrumbs and desktop section navigation, and replaced the conspicuous sidebar scrollbar with a thin theme-aware track.
+- Comparison documentation now previews a controlled plan comparison with optional evidence highlighting. Added minimal usage and composition guidance. The complete shopping flow is linked under Examples, alongside project exploration, reservations and an MCP workspace, with a gallery and component cross-links.
+- Fixed mobile Comparison spacing when no visual is supplied and made MDX code blocks keyboard-scrollable.
+- TypeScript/ESLint, 38 tests, production site/registry build, and fresh Vite/Next.js registry installation/builds pass. Visual and axe WCAG A/AA checks pass at 1440 and 390 px in light/dark for /components, /docs/comparison and /examples, without horizontal page overflow. Repeated theme QA in an extension-free browser after detecting Dark Reader in the daily profile.
+- Browser interaction checks pass: filtered search, empty/reset, component navigation, highlight/reset, source tab, and the linked shopping recommendation. No page errors in these flows.

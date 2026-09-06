@@ -116,6 +116,6 @@ await writeFile(
 );
 await writeFile(
   "public/llms.txt",
-  `# Fabrials WebMCP UI\n\nReact 19 / Tailwind 4 / shadcn Base UI registry. MIT.\nMCP target: 2026-07-28. WebMCP is a browser proposal, distinct from remote MCP.\n\n## Components\n${catalog.map((x) => `- [${x.title}](${origin}/docs/${x.slug}): ${x.description}\n  Install: bunx shadcn@latest add ${origin}/r/${x.slug}.json`).join("\n")}\n\n## Guides\n${["installation", "webmcp", "authentication", "server", "compatibility"].map((x) => `- ${origin}/docs/${x}`).join("\n")}\n`,
+  `# Fabrials WebMCP UI\n\nReact 19 / Tailwind 4 / shadcn Base UI registry. MIT.\nMCP target: 2026-07-28. WebMCP is a browser proposal, distinct from remote MCP.\n\nBrowse the [component catalog](${origin}/components) or explore [complete examples](${origin}/examples).\n\n## Components\n${catalog.map((x) => `- [${x.title}](${origin}/docs/${x.slug}): ${x.description}\n  Install: bunx shadcn@latest add ${origin}/r/${x.slug}.json`).join("\n")}\n\n## Guides\n${["installation", "webmcp", "authentication", "server", "compatibility"].map((x) => `- ${origin}/docs/${x}`).join("\n")}\n`,
 );
 console.log(`Built ${items.length} registry items.`);
