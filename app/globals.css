@@ -9,8 +9,8 @@
   font-display: swap;
 }
 :root {
-  --background: oklch(0.992 0 0);
-  --foreground: oklch(0.18 0 0);
+  --background: oklch(0.984 0.006 100);
+  --foreground: oklch(0.21 0.01 140);
   --card: oklch(1 0 0);
   --card-foreground: var(--foreground);
   --popover: var(--card);
@@ -24,7 +24,7 @@
   --accent: var(--muted);
   --accent-foreground: var(--foreground);
   --destructive: oklch(0.54 0.2 27);
-  --border: oklch(0.902 0 0);
+  --border: oklch(0.895 0.01 110);
   --input: oklch(0.88 0 0);
   --ring: oklch(0.6 0 0);
   --radius: 0.625rem;

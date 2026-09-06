@@ -27,20 +27,21 @@ export function DemoVideo() {
       <div className="mb-7 flex flex-wrap items-end justify-between gap-5">
         <div>
           <p className="text-[11px] uppercase tracking-[.15em] text-muted-foreground">
-            Watch it work · 64 seconds
+            Watch it work · {Math.round(timing.durationInFrames / timing.fps)}{" "}
+            seconds
           </p>
           <h2
             id="demo-video-title"
             className="mt-3 text-3xl font-medium tracking-tight"
           >
-            From a click to a tool call.
+            From a request to a decision.
           </h2>
           <p className="mt-3 text-sm text-muted-foreground">
             An animated walkthrough with Grok narration and original music.
           </p>
         </div>
         <a
-          href="/api/demo-media/demo.mp4?v=3&download=1"
+          href="/api/demo-media/demo.mp4?v=4&download=1"
           className="inline-flex min-h-10 items-center gap-2 text-sm underline underline-offset-4"
         >
           <Download className="size-4" />
@@ -54,15 +55,15 @@ export function DemoVideo() {
           controls={started}
           playsInline
           preload="none"
-          poster="/api/demo-media/poster.jpg?v=3"
-          aria-label="Fabrials UI demonstration: manual controls, simulated tools, native WebMCP and remote MCP"
+          poster="/api/demo-media/poster.jpg?v=4"
+          aria-label="Fabrials UI: compare a coffee setup, understand the recommendation, and review your selection"
           onPlay={() => setStarted(true)}
           onError={() => setError(true)}
         >
-          <source src="/api/demo-media/demo.mp4?v=3" type="video/mp4" />
+          <source src="/api/demo-media/demo.mp4?v=4" type="video/mp4" />
           <track
             kind="captions"
-            src="/api/demo-media/transcript.vtt?v=3"
+            src="/api/demo-media/transcript.vtt?v=4"
             srcLang="en"
             label="English"
           />

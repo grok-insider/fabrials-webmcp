@@ -29,6 +29,29 @@ const item = (
 });
 export const catalog: CatalogItem[] = [
   item(
+    "comparison",
+    "Comparison",
+    "Interaction",
+    "Show choices side by side and highlight the evidence behind a recommendation.",
+    ["registry/components/comparison.tsx"],
+    ["Comparison"],
+    [
+      [
+        "columns",
+        "ComparisonColumn[]",
+        "Stable IDs, titles, visuals and optional actions.",
+      ],
+      [
+        "rows",
+        "ComparisonRow[]",
+        "Values by column ID; highlight relevant evidence.",
+      ],
+      ["caption", "string", "Accessible table description."],
+      ["note", "ReactNode", "Visible explanation of the current highlights."],
+    ],
+    "Controlled presentation. Register application-specific comparison tools with useWebMCPTool; use the same state for human controls and agent actions.",
+  ),
+  item(
     "webmcp-provider",
     "WebMCP provider",
     "WebMCP",

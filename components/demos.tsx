@@ -1,4 +1,5 @@
 "use client";
+import { CoffeeDemo } from "@/components/coffee-demo";
 import { useState } from "react";
 import {
   ArrowRight,
@@ -465,6 +466,7 @@ export function ComponentDemo({ slug }: { slug: string }) {
     ].includes(slug)
   )
     return <ExplorerDemo compact />;
+  if (slug === "comparison") return <CoffeeDemo />;
   if (slug === "wizard") return <BookingDemo />;
   if (slug === "date-range")
     return <DateRangePicker value={dates} onChange={setDates} />;

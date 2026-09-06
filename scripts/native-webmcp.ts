@@ -17,8 +17,72 @@ type NativeModelContext = {
 };
 try {
   const page = await browser.newPage();
-  await page.goto(process.env.TEST_ORIGIN ?? "http://localhost:3210");
-  await page.getByText("WebMCP available", { exact: true }).waitFor();
+  const origin = process.env.TEST_ORIGIN ?? "http://localhost:3210";
+  await page.goto(origin);
+  await page.waitForFunction(async () =>
+    (
+      await (
+        document as unknown as { modelContext: NativeModelContext }
+      ).modelContext.getTools()
+    ).some((t) => t.name === "compare_coffee_machines"),
+  );
+  const execute = async (name: string, args: Record<string, unknown>) =>
+    page.evaluate(
+      async ({ name, args }) => {
+        const context = (
+          document as unknown as { modelContext: NativeModelContext }
+        ).modelContext;
+        let tool = (await context.getTools()).find((t) => t.name === name);
+        // React StrictMode can abort the first registration while the native
+        // discovery promise resolves. Wait for registration only; never replay execution.
+        const deadline = Date.now() + 3000;
+        while (!tool && Date.now() < deadline) {
+          await new Promise((resolve) => setTimeout(resolve, 30));
+          tool = (await context.getTools()).find((t) => t.name === name);
+        }
+        if (!tool) throw new Error(`Missing native tool ${name}`);
+        return context.executeTool(tool, JSON.stringify(args));
+      },
+      { name, args },
+    );
+  await execute("compare_coffee_machines", { maxWidth: 32, fitting: "58 mm" });
+  await page
+    .getByText("Studio Dual fits your setup.", { exact: true })
+    .waitFor();
+  await execute("set_coffee_cart", { productId: "studio" });
+  await page.waitForFunction(async () =>
+    (
+      await (
+        document as unknown as { modelContext: NativeModelContext }
+      ).modelContext.getTools()
+    ).some((t) => t.name === "set_coffee_filter"),
+  );
+  await execute("set_coffee_filter", { included: true });
+  await page.getByText("€1,314", { exact: true }).waitFor();
+  await page.getByRole("button", { name: /Filter added/ }).click();
+  assert.equal(await page.getByText("€1,314", { exact: true }).count(), 0);
+  await execute("review_coffee_cart", {});
+  await page.getByRole("dialog").waitFor();
+  await page.getByRole("button", { name: "Cancel", exact: true }).click();
+  await execute("set_coffee_cart", { productId: "" });
+  await page.waitForFunction(
+    async () =>
+      !(
+        await (
+          document as unknown as { modelContext: NativeModelContext }
+        ).modelContext.getTools()
+      ).some((t) => t.name === "set_coffee_filter"),
+  );
+  console.log(
+    "Native coffee comparison, conditional cart tools, human correction and review passed.",
+  );
+  await page.goto(
+    `${process.env.TEST_ORIGIN ?? "http://localhost:3210"}/examples#explorer`,
+  );
+  await page
+    .locator("#explorer")
+    .getByText("WebMCP available", { exact: true })
+    .waitFor();
   const result = await page.evaluate(async () => {
     const context = (
       document as unknown as { modelContext: NativeModelContext }
@@ -33,9 +97,9 @@ try {
     return { names: tools.map((t) => t.name), result };
   });
   await page.waitForFunction(
-    () => document.querySelectorAll("tbody tr").length === 2,
+    () => document.querySelectorAll("#explorer tbody tr").length === 2,
   );
-  assert.equal(await page.locator("tbody tr").count(), 2);
+  assert.equal(await page.locator("#explorer tbody tr").count(), 2);
   await page.getByRole("link", { name: "Documentation", exact: true }).click();
   await page
     .getByRole("heading", { name: "Introduction", exact: true })

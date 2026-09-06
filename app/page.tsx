@@ -3,14 +3,12 @@ import Link from "next/link";
 import {
   ArrowRight,
   ArrowUpRight,
-  Braces,
-  Layers,
   MousePointer2,
   Terminal,
   Workflow,
   Code2,
 } from "lucide-react";
-import { ExplorerDemo } from "@/components/demos";
+import { CoffeeDemo } from "@/components/coffee-demo";
 import { CodeBlock } from "@/components/code-block";
 import { catalog } from "@/lib/catalog";
 export default function Home() {
@@ -36,7 +34,7 @@ export default function Home() {
             <br className="hidden sm:block" /> Accessible interfaces, structured
             tools, and shared state. Built on shadcn. Yours to shape.
           </p>
-          <div className="mt-8 flex items-center gap-6">
+          <div className="mt-8 flex flex-wrap items-center gap-x-6 gap-y-3">
             <Link
               href="/docs/installation"
               className="inline-flex h-10 items-center gap-3 rounded-md bg-primary px-4 text-sm text-primary-foreground hover:opacity-85"
@@ -57,39 +55,28 @@ export default function Home() {
             </a>
           </div>
         </div>
-        <div className="hidden rounded-xl border bg-card p-7 lg:block">
-          <div className="mb-7 flex items-center justify-between">
-            <span className="text-[10px] uppercase tracking-[.15em] text-muted-foreground">
-              A shared interface
-            </span>
-            <span className="font-mono text-[10px] text-muted-foreground">
-              01 / architecture
-            </span>
+        <div className="rounded-2xl border bg-card p-6 sm:p-7">
+          <p className="text-[10px] font-medium uppercase tracking-[.16em] text-muted-foreground">
+            From interface to capability
+          </p>
+          <p className="mt-5 text-xl leading-8 tracking-tight">
+            The comparison. The selection.
+            <br />
+            The reason behind the recommendation.
+          </p>
+          <p className="mt-4 text-sm leading-6 text-muted-foreground">
+            Give agents useful actions in the interface your users already
+            understand.
+          </p>
+          <div className="mt-6">
+            <CodeBlock
+              variant="command"
+              code="bunx shadcn@latest add https://ui.fabrials.com/r/webmcp-provider.json"
+            />
           </div>
-          <div className="flex items-center justify-between gap-3">
-            <div className="flex flex-1 items-center gap-2 rounded-md border p-3 text-xs">
-              <MousePointer2 className="size-4" />
-              People
-            </div>
-            <div className="flex flex-1 items-center gap-2 rounded-md border p-3 text-xs">
-              <Braces className="size-4" />
-              Agents
-            </div>
-          </div>
-          <div className="mx-auto flex h-8 w-1/2 justify-between border-x" />
-          <div className="flex items-center justify-between rounded-md bg-foreground p-4 text-background">
-            <span className="flex items-center gap-2 text-sm">
-              <Layers className="size-4" />
-              Your components
-            </span>
-            <span className="font-mono text-[10px] opacity-60">
-              React + shadcn
-            </span>
-          </div>
-          <div className="mx-auto h-6 w-px bg-border" />
-          <div className="flex items-center justify-between rounded-md border border-dashed p-3 text-xs text-muted-foreground">
-            <span>Your application state</span>
-            <span className="font-mono text-[10px]">One source of truth</span>
+          <div className="mt-5 flex items-center justify-between text-xs text-muted-foreground">
+            <span>Copy the code. Make it yours.</span>
+            <span>MIT ↗</span>
           </div>
         </div>
       </section>
@@ -102,37 +89,32 @@ export default function Home() {
         <span>Tailwind CSS 4</span>
         <span>MIT licensed</span>
       </section>
-      <section className="grid gap-8 pb-16 lg:grid-cols-[.65fr_1.35fr]">
-        <div className="pt-3">
-          <p className="text-[11px] uppercase tracking-[.15em] text-muted-foreground">
-            See it in action
+      <section id="try-it" className="scroll-mt-24 pb-16">
+        <div className="mb-8 flex flex-wrap items-end justify-between gap-5">
+          <div>
+            <p className="text-[11px] uppercase tracking-[.15em] text-muted-foreground">
+              A complete task. One shared interface.
+            </p>
+            <h2 className="mt-3 text-3xl font-medium tracking-tight sm:text-4xl">
+              Help someone find their perfect fit.
+            </h2>
+          </div>
+          <p className="max-w-sm text-sm leading-6 text-muted-foreground">
+            Compare a setup yourself, or try a guided tool call. See the
+            evidence, build a selection, and make the final decision.
           </p>
-          <h2 className="mt-4 max-w-xs text-3xl leading-tight font-medium tracking-tight">
-            Same components.
-            <br />
-            Shared context.
-          </h2>
-          <p className="mt-5 max-w-xs text-sm leading-7 text-muted-foreground">
-            Filter the table yourself, or try a structured tool call. Both
-            update the same interface, through the same application logic.
+        </div>
+        <CoffeeDemo />
+        <div className="mt-5 flex flex-wrap items-center justify-between gap-3 text-xs text-muted-foreground">
+          <p>
+            Powered by the WebMCP provider, Comparison and Confirmation dialog.
           </p>
           <Link
-            href="/docs/webmcp"
-            className="mt-6 inline-flex items-center gap-2 text-sm"
+            href="/docs/comparison"
+            className="inline-flex min-h-9 items-center gap-2 text-foreground"
           >
-            How WebMCP works <ArrowUpRight className="size-3.5" />
+            Build this interaction <ArrowUpRight className="size-3.5" />
           </Link>
-          <div className="mt-8 max-w-sm">
-            <CodeBlock
-              variant="command"
-              code={
-                "bunx shadcn@latest add https://ui.fabrials.com/r/webmcp-provider.json"
-              }
-            />
-          </div>
-        </div>
-        <div className="min-w-0 rounded-xl border bg-card p-5 shadow-[0_4px_24px_-16px_rgba(0,0,0,0.15)] sm:p-7">
-          <ExplorerDemo compact />
         </div>
       </section>
       <DemoVideo />
@@ -200,7 +182,7 @@ export default function Home() {
               Start with a working example.
             </h2>
             <p className="mt-1 text-sm text-muted-foreground">
-              A data explorer, a reservation flow, and a live MCP console.
+              A product comparison, a reservation flow, and a live MCP console.
             </p>
           </div>
         </div>

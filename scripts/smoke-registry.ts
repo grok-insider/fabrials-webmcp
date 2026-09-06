@@ -68,6 +68,7 @@ for (const template of ["vite", "next"]) {
   );
   run("bun", ["install"], dir);
   const names = [
+    "comparison",
     "mcp-dashboard",
     "webmcp-provider",
     "webmcp-form",
@@ -84,8 +85,10 @@ for (const template of ["vite", "next"]) {
     ["add", ...names.map((n) => `${origin}/r/${n}.json`), "-y", "--overwrite"],
     dir,
   );
-  const component =
-    "'use client';\nimport {MCPDashboard} from '@/components/webmcp/mcp-dashboard';\nexport default function App(){return <MCPDashboard/>;}";
+  const component = `"use client";
+import {MCPDashboard} from '@/components/webmcp/mcp-dashboard';
+import {Comparison} from '@/components/webmcp/comparison';
+export default function App(){return <><Comparison columns={[{id:"demo",title:"Demo"}]} rows={[]} caption="Compare choices"/><MCPDashboard/></>;}`;
   if (template === "vite") {
     await writeFile(join(dir, "App.tsx"), component);
     await writeFile(

@@ -1,3 +1,4 @@
+import { CoffeeDemo } from "@/components/coffee-demo";
 import { ExplorerDemo, BookingDemo } from "@/components/demos";
 import { MCPDashboard } from "@/registry/components/mcp-dashboard";
 export const metadata = { title: "Examples" };
@@ -16,9 +17,18 @@ export default function Examples() {
           you install in your own app.
         </p>
       </header>
-      <section id="explorer">
+      <section id="comparison">
         <div className="mb-5 flex items-center gap-4">
           <span className="font-mono text-xs text-muted-foreground">01</span>
+          <h2 className="text-xl font-medium tracking-tight">
+            From a recommendation to a selection
+          </h2>
+        </div>
+        <CoffeeDemo />
+      </section>
+      <section id="explorer">
+        <div className="mb-5 flex items-center gap-4">
+          <span className="font-mono text-xs text-muted-foreground">02</span>
           <h2 className="text-xl font-medium tracking-tight">
             A project explorer
           </h2>
@@ -29,7 +39,7 @@ export default function Examples() {
       </section>
       <section id="reservation">
         <div className="mb-5 flex items-center gap-4">
-          <span className="font-mono text-xs text-muted-foreground">02</span>
+          <span className="font-mono text-xs text-muted-foreground">03</span>
           <h2 className="text-xl font-medium tracking-tight">
             A reservation flow
           </h2>
@@ -40,7 +50,7 @@ export default function Examples() {
       </section>
       <section id="console">
         <div className="mb-5 flex items-center gap-4">
-          <span className="font-mono text-xs text-muted-foreground">03</span>
+          <span className="font-mono text-xs text-muted-foreground">04</span>
           <h2 className="text-xl font-medium tracking-tight">
             A real MCP connection
           </h2>

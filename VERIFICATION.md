@@ -36,3 +36,12 @@ Reproduce consumer installation with a local dev server running and `bun run tes
 - Final assets and generated audio sources were PUT/HEAD verified in house S3, apps/videos/fabrials-ui/v2/. Public player version bumped to v=3; byte-range/no-transform behavior preserved.
 - Published commit d06fb29 through Coolify deployment oph3ibgmudpaxllddhjlhyl8 (finished). Public Chrome playback: duration 64.128 s, unmuted volume 1, audio decoded; seek to 55.5 s succeeds without errors. Public Range response: 206, bytes 0-1023/9237490, Content-Length 1024.
 - Public registry installation and production builds passed in fresh Vite and Next.js projects after publication.
+
+## Task-focused refinement · 2026-09-07
+
+- Analyzed the requested espresso reference: cloned vincanger/webmcp-espresso-store to /tmp/webmcp-espresso-store, read its tool/compatibility/comparison flows, retrieved the YouTube transcript and inspected the 16:10–17:30 demonstration clip. Findings in docs/demo-refinement.md.
+- Added an original fictional coffee setup example and reusable registry Comparison: evidence highlighting, responsive mobile cards, shared manual/simulated/native actions, conditional cart tools, compatible filter, manual correction and human review. No payment or real order is made.
+- Native Chrome 152 test executes comparison, selection, conditional filter and review tools; manual removal updates the same total. Clearing the cart unregisters conditional tools. Existing explorer, declarative form and route-unmount checks also pass.
+- TypeScript/ESLint, 36 tests, registry/site production build, and fresh Vite/Next.js registry installs/builds pass (including Comparison). Automated axe WCAG A/AA checks of the new example pass in light and dark themes after transitions settle. Mobile 390 px has no page overflow; Escape dismisses the review dialog.
+- Remotion 4.0.521 reverified as latest. Film uses the actual Comparison component, same product data and original SVG illustrations across a continuous task; inspected six previews and loaded updated composition in Studio.
+- Grok Eve through ai.fabrials.com receives /ˈfæbriəlz/ for Fabrials, replacing the earlier split respelling. This is an adopted FAB-ree-uhlz reading, not a claim of one canonical literary pronunciation. Generated character alignment contains the requested IPA. Captions use returned alignment and fail generation on text mismatch. Perceptual listening remains unavailable in this agent environment.

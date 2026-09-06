@@ -1,9 +1,9 @@
 import { createHash, createHmac } from "node:crypto";
 export const demoAssets = {
-  "demo.mp4": { key: "videos/fabrials-ui/v2/demo.mp4", type: "video/mp4" },
-  "poster.jpg": { key: "videos/fabrials-ui/v2/poster.jpg", type: "image/jpeg" },
+  "demo.mp4": { key: "videos/fabrials-ui/v3/demo.mp4", type: "video/mp4" },
+  "poster.jpg": { key: "videos/fabrials-ui/v3/poster.jpg", type: "image/jpeg" },
   "transcript.vtt": {
-    key: "videos/fabrials-ui/v2/transcript.vtt",
+    key: "videos/fabrials-ui/v3/transcript.vtt",
     type: "text/vtt; charset=utf-8",
   },
 } as const;

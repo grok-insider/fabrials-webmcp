@@ -16,8 +16,10 @@ for (const [index, scene] of narration.entries()) {
     text: scene.text,
     voice_id: "eve",
     language: "en",
-    speed: 1.04,
-    replace: { Fabrials: "Fay bree uls", UI: "U I", MCP: "M C P" },
+    speed: 1.0,
+    with_timestamps: true,
+    output_format: { codec: "mp3", sample_rate: 44100, bit_rate: 192000 },
+    replace: { Fabrials: "/ˈfæbriəlz/", UI: "U I", MCP: "M C P" },
   };
   const fingerprint = createHash("sha256")
     .update(JSON.stringify(params))
@@ -42,7 +44,14 @@ for (const [index, scene] of narration.entries()) {
       throw new Error(
         `Relay TTS failed (${response.status}): ${(await response.text()).slice(0, 160)}`,
       );
-    const bytes = Buffer.from(await response.arrayBuffer());
+    const payload = await response.json();
+    if (!payload.audio || !payload.audio_timestamps?.graph_times)
+      throw new Error("Missing Grok audio alignment");
+    const bytes = Buffer.from(payload.audio, "base64");
+    await writeFile(
+      `${file}.alignment.json`,
+      JSON.stringify(payload.audio_timestamps),
+    );
     await writeFile(file, bytes);
     await writeFile(`${file}.sha256`, fingerprint);
   }
