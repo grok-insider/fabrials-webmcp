@@ -1,23 +1,30 @@
-# Product demo
+# Fabrials UI film
 
-70 seconds, 1920×1080, 30 fps, H.264/yuv420p, silent. English captions are burned into the picture; `transcript.vtt` also supplies an accessible text track.
+64 seconds · 1920×1080 · 30 fps · H.264 + stereo AAC.
 
-The recorder drives the real UI and asserts the visible results. Ordinary chapters run in Chrome without WebMCP flags; the native chapter uses Chrome's experimental WebMCPTesting API to execute a registered tool. This is a native browser test invocation, not a recorded LLM conversation. The remote chapter calls the actual included MCP server.
+React elements, SVG, frame-driven motion, spring entrances and Remotion transitions illustrate manual controls, a labeled simulated tool call, experimental native WebMCP, remote MCP and installation. Live behavior is covered by separate browser/protocol checks.
+
+All Remotion packages are pinned to **4.0.521**, the latest release verified at production. English narration uses Grok voice **eve** through **https://ai.fabrials.com/v1/tts**. The instrumental bed is an original deterministic synthesizer composition. No stock music or screenshots are used.
 
 ## Reproduce
 
-Install Bun 1.4.2, Chrome, FFmpeg with libx264/drawtext, and a readable TrueType font. Start the app with `bun run dev` (or set TEST_ORIGIN to the published site).
+Use Bun 1.4.2, Node 22+, FFmpeg and an actual Chrome executable.
 
 ```sh
-CHROME_BIN=/path/to/actual/chrome VIDEO_FONT=/path/to/font.ttf bun run video:record
+bun install --frozen-lockfile
+# Supply AI_RELAY_VIRTUAL_KEY securely through the environment.
+bun run video:voice
+bun run video:music
+CHROME_BIN=/path/to/chrome bun run video:render
+bun run video:studio
 ```
 
-Do not use a daily-browser launcher as CHROME_BIN. The script opens and closes temporary browsers, records real interaction frames, and encodes six chapters into `artifacts/demo/demo.mp4` and a poster. Intermediate files are reproducible build artifacts, excluded from git. The recorder also copies `video/transcript.vtt` into the output directory. A restrained camera motion is applied during final encoding. To resume a verified recording, set `VIDEO_START=05` (earlier segments must have their full expected durations).
+Voice requests are fingerprint-cached under ignored artifacts/remotion-public/. Narration generation updates video/remotion/timing.json; scene lengths follow actual audio durations. Rendering copies the bundled font, regenerates sentence captions, and writes MP4/poster/VTT to artifacts/remotion-film/. Captions use approximate sentence timing within each independently synthesized clip. PREVIEW_FRAMES=90,510,810,1100,1500,1800 renders review frames.
 
-The six chapters last 8, 14, 14, 13, 13 and 8 seconds: introduction, manual controls, simulator, native WebMCP, remote MCP, installation. Each action is scheduled by frame index so browser/network waiting does not alter the final duration. Captions distinguish simulation from native execution.
+The composition mixes voice with a quiet instrumental bed and fades the music at the boundaries. The player requires a click, exposes audio controls, offers captions and includes the full transcript.
 
 ## Publish
 
-Use `bun run video:publish` with runtime S3_* credentials from Coolify. The script PUTs and HEAD-verifies the three fixed assets in bucket `apps`, prefix `videos/fabrials-ui/v1/`. Credentials must never be committed or written into recordings. The app serves only these three allowlisted objects through `/api/demo-media/{asset}`, supports HEAD and single byte ranges, and streams bodies without buffering the entire video.
+bun run video:publish uses runtime S3_* credentials, PUTs and HEAD-verifies the public assets in bucket apps, prefix videos/fabrials-ui/v2/. PUBLISH_SOURCES=1 also preserves generated narration and score under source/; these are not exposed by the public media route.
 
-The landing loads only its poster initially. Video playback starts on demand; captions, a text transcript and download are available. Bump the asset prefix and the `v` query parameter in the player when replacing a published release, then redeploy so browser/CDN caches use the new URLs.
+Preserve Content-Encoding: identity and Cache-Control: no-transform so proxies retain media lengths and seeking. Bump both prefix and player version when replacing a published film.

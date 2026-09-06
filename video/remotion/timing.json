@@ -1,0 +1,48 @@
+{
+  "fps": 30,
+  "durationInFrames": 1922,
+  "scenes": [
+    {
+      "id": "intro",
+      "from": 0,
+      "frames": 339,
+      "speechSeconds": 10.176,
+      "audio": "voice-0.mp3"
+    },
+    {
+      "id": "human",
+      "from": 339,
+      "frames": 291,
+      "speechSeconds": 8.568,
+      "audio": "voice-1.mp3"
+    },
+    {
+      "id": "tool",
+      "from": 630,
+      "frames": 297,
+      "speechSeconds": 8.784,
+      "audio": "voice-2.mp3"
+    },
+    {
+      "id": "native",
+      "from": 927,
+      "frames": 341,
+      "speechSeconds": 10.248,
+      "audio": "voice-3.mp3"
+    },
+    {
+      "id": "remote",
+      "from": 1268,
+      "frames": 329,
+      "speechSeconds": 9.864,
+      "audio": "voice-4.mp3"
+    },
+    {
+      "id": "outro",
+      "from": 1597,
+      "frames": 325,
+      "speechSeconds": 9.72,
+      "audio": "voice-5.mp3"
+    }
+  ]
+}

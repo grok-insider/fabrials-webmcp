@@ -1,6 +1,8 @@
 "use client";
 import { useRef, useState } from "react";
 import { Download, Play, RotateCcw } from "lucide-react";
+import { narration } from "@/video/remotion/script";
+import timing from "@/video/remotion/timing.json";
 import { Button } from "@/components/ui/button";
 export function DemoVideo() {
   const video = useRef<HTMLVideoElement>(null);
@@ -25,7 +27,7 @@ export function DemoVideo() {
       <div className="mb-7 flex flex-wrap items-end justify-between gap-5">
         <div>
           <p className="text-[11px] uppercase tracking-[.15em] text-muted-foreground">
-            Watch it work · 70 seconds
+            Watch it work · 64 seconds
           </p>
           <h2
             id="demo-video-title"
@@ -34,11 +36,11 @@ export function DemoVideo() {
             From a click to a tool call.
           </h2>
           <p className="mt-3 text-sm text-muted-foreground">
-            Real interactions. One shared interface. No voiceover needed.
+            An animated walkthrough with Grok narration and original music.
           </p>
         </div>
         <a
-          href="/api/demo-media/demo.mp4?v=2&download=1"
+          href="/api/demo-media/demo.mp4?v=3&download=1"
           className="inline-flex min-h-10 items-center gap-2 text-sm underline underline-offset-4"
         >
           <Download className="size-4" />
@@ -52,15 +54,15 @@ export function DemoVideo() {
           controls={started}
           playsInline
           preload="none"
-          poster="/api/demo-media/poster.jpg?v=2"
+          poster="/api/demo-media/poster.jpg?v=3"
           aria-label="Fabrials UI demonstration: manual controls, simulated tools, native WebMCP and remote MCP"
           onPlay={() => setStarted(true)}
           onError={() => setError(true)}
         >
-          <source src="/api/demo-media/demo.mp4?v=2" type="video/mp4" />
+          <source src="/api/demo-media/demo.mp4?v=3" type="video/mp4" />
           <track
             kind="captions"
-            src="/api/demo-media/transcript.vtt?v=2"
+            src="/api/demo-media/transcript.vtt?v=3"
             srcLang="en"
             label="English"
           />
@@ -91,29 +93,14 @@ export function DemoVideo() {
           Read the transcript
         </summary>
         <ol className="mt-3 space-y-2 leading-6">
-          <li>
-            00:00 — One interface for people and agents. Built with React and
-            shadcn.
-          </li>
-          <li>
-            00:08 — Search, filter and select projects using familiar controls.
-          </li>
-          <li>
-            00:22 — Run a labeled simulation. A structured tool updates the same
-            table and returns its result.
-          </li>
-          <li>
-            00:36 — Execute a native WebMCP tool in Chrome with experimental
-            support enabled. No separate agent UI is required.
-          </li>
-          <li>
-            00:49 — Connect to the included MCP server, discover a tool and
-            inspect its real response.
-          </li>
-          <li>
-            01:02 — Install the components with Bun. Your application owns the
-            code.
-          </li>
+          {narration.map((scene, index) => (
+            <li key={scene.id}>
+              {new Date((timing.scenes[index].from / 30) * 1000)
+                .toISOString()
+                .slice(14, 19)}{" "}
+              — {scene.text}
+            </li>
+          ))}
         </ol>
       </details>
     </section>

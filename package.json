@@ -13,8 +13,11 @@
     "test": "vitest run",
     "test:registry": "tsx scripts/smoke-registry.ts",
     "test:native": "tsx scripts/native-webmcp.ts",
-    "video:record": "tsx scripts/record-demo.ts",
-    "video:publish": "tsx scripts/publish-demo.ts"
+    "video:publish": "tsx scripts/publish-demo.ts",
+    "video:voice": "tsx scripts/generate-voice.ts",
+    "video:music": "tsx scripts/generate-music.ts",
+    "video:render": "tsx scripts/render-film.ts",
+    "video:studio": "remotion studio video/remotion/index.tsx --public-dir=artifacts/remotion-public --no-open"
   },
   "dependencies": {
     "@base-ui/react": "^1.8.0",
@@ -39,6 +42,11 @@
   },
   "devDependencies": {
     "@eslint/compat": "^2.1.1",
+    "@remotion/bundler": "4.0.521",
+    "@remotion/cli": "4.0.521",
+    "@remotion/media": "4.0.521",
+    "@remotion/renderer": "4.0.521",
+    "@remotion/transitions": "4.0.521",
     "@tailwindcss/postcss": "^4.3.3",
     "@testing-library/react": "^16.3.3",
     "@testing-library/user-event": "^14.6.7",
@@ -52,6 +60,7 @@
     "jsdom": "^30.0.1",
     "playwright-core": "^1.63.0",
     "prettier": "^3.9.6",
+    "remotion": "4.0.521",
     "shadcn": "^4.21.0",
     "tailwindcss": "^4.3.3",
     "tsx": "^4.23.13",

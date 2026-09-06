@@ -3,8 +3,22 @@ import { resolve } from "node:path";
 import { demoAssets, mediaConfig, signMediaRequest } from "../lib/demo-media";
 const config = mediaConfig();
 if (!config) throw new Error("S3_* environment variables are required.");
-const directory = resolve(process.env.VIDEO_OUTPUT || "artifacts/demo");
-for (const [name, entry] of Object.entries(demoAssets)) {
+const directory = resolve(
+  process.env.VIDEO_OUTPUT || "artifacts/remotion-film",
+);
+const assets: Record<string, { key: string; type: string }> = { ...demoAssets };
+if (process.env.PUBLISH_SOURCES === "1") {
+  for (const name of [
+    ...Array.from({ length: 6 }, (_, i) => `voice-${i}.mp3`),
+    "music.wav",
+  ]) {
+    assets[`../remotion-public/${name}`] = {
+      key: `videos/fabrials-ui/v2/source/${name}`,
+      type: name.endsWith("mp3") ? "audio/mpeg" : "audio/wav",
+    };
+  }
+}
+for (const [name, entry] of Object.entries(assets)) {
   const body = await readFile(`${directory}/${name}`);
   const signed = signMediaRequest(config, entry.key, "PUT", body);
   const response = await fetch(signed.url, {

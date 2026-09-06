@@ -1,25 +1,56 @@
 WEBVTT
 
-00:00.000 --> 00:08.000
-One interface for people and agents.
-Built with React and shadcn.
+00:00:00.500 --> 00:00:05.588
+Your app already knows how to search, select, and get things done.
 
-00:08.000 --> 00:22.000
-Search, filter and select projects.
-Familiar controls update shared application state.
+00:00:05.588 --> 00:00:09.404
+What if an agent could use those same actions?
 
-00:22.000 --> 00:36.000
-Run a labeled simulation.
-A structured tool updates the same table and returns its result.
+00:00:09.404 --> 00:00:10.676
+Meet Fabrials UI.
 
-00:36.000 --> 00:49.000
-Execute a native WebMCP tool in Chrome.
-Experimental WebMCP support is enabled for this scene.
+00:00:11.800 --> 00:00:13.662
+Start with a familiar interface.
 
-00:49.000 --> 01:02.000
-Connect to the included MCP server.
-Discover a tool, run it and inspect its real response.
+00:00:13.662 --> 00:00:16.642
+Filter the project list, then select a row.
 
-01:02.000 --> 01:10.000
-Install the components with Bun.
-Your application owns the code. ui.fabrials.com
+00:00:16.642 --> 00:00:20.368
+Every action stays visible, and the user stays in control.
+
+00:00:21.500 --> 00:00:24.794
+Now call the same action as a structured tool.
+
+00:00:24.794 --> 00:00:30.284
+The arguments are validated, the table updates, and the result tells you exactly what changed.
+
+00:00:31.400 --> 00:00:35.499
+Web MCP exposes those tools inside the browser.
+
+00:00:35.499 --> 00:00:38.573
+Native access needs experimental browser support.
+
+00:00:38.573 --> 00:00:41.647
+The manual interface keeps working everywhere.
+
+00:00:42.766 --> 00:00:47.055
+For remote MCP servers, connect, discover tools, and run them.
+
+00:00:47.055 --> 00:00:52.630
+Inspect the response, follow progress, and ask for input when it is needed.
+
+00:00:53.733 --> 00:00:57.267
+Install just the components you need with Bun.
+
+00:00:57.267 --> 00:00:59.035
+You own the code.
+
+00:00:59.035 --> 00:01:00.360
+Build for people.
+
+00:01:00.360 --> 00:01:02.569
+Make it ready for agents.
+
+00:01:02.569 --> 00:01:03.453
+Fabrials UI.
+

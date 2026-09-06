@@ -25,3 +25,12 @@ Reproduce consumer installation with a local dev server running and `bun run tes
 - Video capture assertions verify actual manual filters, repeated simulations, native Chrome execution and MCP results. Final MP4: 70 seconds, 1920×1080, 30 fps, H.264, no audio. MP4/poster/VTT PUT and HEAD checks passed on house S3; reproducible sources live in `video/` and `scripts/record-demo.ts`.
 
 - Production proxy handling: media responses use identity encoding and `no-transform` so Traefik/Cloudflare preserve Content-Length and byte-range seeking. The player uses revisioned media URLs to bypass earlier compressed cache entries.
+
+## Remotion replacement · 2026-09-06
+
+- Supersedes the silent capture-based film above; the old recording script has been removed.
+- Remotion 4.0.521, six React/SVG scenes, frame-driven transitions and UI actions, Grok Eve narration generated through ai.fabrials.com, original synthesized music.
+- Inspected all six scene previews and loaded the composition in Remotion Studio. Final media: 1920×1080 H.264 at 30 fps, stereo 48 kHz AAC, 64.128 seconds including encoder padding, 9,237,490 bytes.
+- FFmpeg measured the final mix at -18.76 LUFS integrated and -3.74 dBTP (no clipping). Audio perceptual listening was unavailable in this agent environment; loudness and stream checks are technical validation.
+- TypeScript/ESLint, all 34 tests and the production registry/site build pass. Timeline tests ensure speech fits every scene; captions contain all narration sentences.
+- Final assets and generated audio sources were PUT/HEAD verified in house S3, apps/videos/fabrials-ui/v2/. Public player version bumped to v=3; byte-range/no-transform behavior preserved.
