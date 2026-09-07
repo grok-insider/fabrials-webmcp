@@ -1,18 +1,11 @@
 "use client";
 import { useEffect, useRef, useState } from "react";
-import {
-  Play,
-  Pause,
-  RotateCcw,
-  Volume2,
-  VolumeX,
-  Check,
-  ArrowRight,
-} from "lucide-react";
+import { Play, Pause, RotateCcw, Volume2, VolumeX, Check } from "lucide-react";
+import { TourAgentPanel } from "@/components/tour-agent-panel";
 import { Button } from "@/components/ui/button";
 import { Comparison } from "@/registry/components/comparison";
 import { CoffeeMachine } from "@/components/coffee-machine";
-import { coffeeProducts, coffeeTotal } from "@/lib/coffee-demo";
+import { coffeeProducts } from "@/lib/coffee-demo";
 import { tourDuration, tourSnapshot } from "@/lib/coffee-tour";
 import captions from "@/video/remotion/captions.json";
 import timing from "@/video/remotion/timing.json";
@@ -80,7 +73,7 @@ export function LandingTour() {
       await audio.play();
     } catch {
       setError(
-        "Audio could not start. Retry, or explore each chapter using the timeline.",
+        "Audio could not start. Retry, or explore the tour using the timeline.",
       );
     } finally {
       setLoading(false);
@@ -113,9 +106,7 @@ export function LandingTour() {
         onError={() => {
           setPlaying(false);
           setLoading(false);
-          setError(
-            "Audio is unavailable. Retry playback or explore the chapters.",
-          );
+          setError("Audio is unavailable. Retry playback or use the timeline.");
         }}
       />
       <div className="sticky top-17 z-20 flex flex-wrap items-center justify-between gap-4 border-b bg-card px-5 py-4 lg:px-8">
@@ -169,28 +160,7 @@ export function LandingTour() {
           </Button>
         </div>
       </div>
-      <div className="grid xl:grid-cols-[220px_minmax(0,1fr)_280px] 2xl:grid-cols-[240px_minmax(0,1fr)_340px]">
-        <nav
-          aria-label="Tour chapters"
-          className="flex gap-2 overflow-x-auto border-b p-3 xl:flex-col xl:border-r xl:border-b-0 xl:p-5"
-        >
-          {chapters.map((c, i) => (
-            <button
-              key={c.title}
-              onClick={() => seek(timing.scenes[i].from / timing.fps)}
-              aria-current={chapter === i ? "step" : undefined}
-              className={`flex shrink-0 items-start gap-3 rounded-lg p-3 text-left transition-colors xl:w-full ${chapter === i ? "bg-foreground text-background" : "text-muted-foreground hover:bg-muted"}`}
-            >
-              <span className="font-mono text-xs">0{i + 1}</span>
-              <span>
-                <span className="block text-sm font-medium">{c.title}</span>
-                <span className="mt-1 hidden text-xs leading-5 xl:block">
-                  {c.detail}
-                </span>
-              </span>
-            </button>
-          ))}
-        </nav>
+      <div className="grid gap-6 p-4 sm:p-6 xl:grid-cols-[minmax(0,1fr)_320px] 2xl:grid-cols-[minmax(0,1fr)_360px]">
         <div className="min-w-0 p-5 sm:p-7 lg:p-8">
           <div className="mb-5 flex flex-wrap items-center justify-between gap-3">
             <p className="text-sm text-muted-foreground">Find the right fit.</p>
@@ -291,68 +261,7 @@ export function LandingTour() {
             ]}
           />
         </div>
-        <aside
-          aria-label="Tour result"
-          className="flex flex-col border-t bg-muted/30 p-5 sm:p-7 xl:border-t-0 xl:border-l"
-        >
-          <p className="text-xs font-medium uppercase tracking-wider text-muted-foreground">
-            {state.review ? "Ready for review" : "Your selection"}
-          </p>
-          <div className="my-6 flex-1">
-            {state.id ? (
-              <div key="selected" className="tour-enter">
-                <CoffeeMachine
-                  color={coffeeProducts[0].color}
-                  className="mb-5 h-24 w-32"
-                />
-                <h4 className="text-xl font-medium">Studio Dual</h4>
-                <p className="mt-2 text-sm text-muted-foreground">
-                  Fits the counter. Keeps your accessories.
-                </p>
-                <div
-                  className={`mt-5 rounded-lg border p-3 text-sm transition-colors duration-500 ${state.filter ? "bg-lime-100 text-lime-950" : "text-muted-foreground"}`}
-                >
-                  {state.filter
-                    ? "✓ Compatible filter added"
-                    : "Compatible filter · optional"}
-                </div>
-              </div>
-            ) : (
-              <div className="rounded-xl border border-dashed p-5 text-sm leading-6 text-muted-foreground">
-                A good recommendation starts with your needs. Follow the
-                evidence, then build your selection.
-              </div>
-            )}
-          </div>
-          <div className="flex items-center justify-between border-t pt-5">
-            <span className="text-sm text-muted-foreground">Total</span>
-            <strong className="text-2xl font-medium tabular-nums">
-              {state.id
-                ? price.format(coffeeTotal(state.id, state.filter))
-                : "—"}
-            </strong>
-          </div>
-          <div
-            className={`mt-5 rounded-lg p-4 text-sm transition-colors ${state.review ? "bg-foreground text-background" : "bg-muted text-muted-foreground"}`}
-          >
-            {state.review ? (
-              <span className="flex items-center justify-between">
-                Your choice. Your decision.
-                <Check className="size-4" />
-              </span>
-            ) : chapter === 5 ? (
-              <a
-                href="/examples#comparison"
-                className="flex items-center justify-between"
-              >
-                Try the example
-                <ArrowRight className="size-4" />
-              </a>
-            ) : (
-              "Fictional products. No order is created."
-            )}
-          </div>
-        </aside>
+        <TourAgentPanel time={time} />
       </div>
       <div className="border-t bg-background px-5 py-5 sm:px-8">
         <p
@@ -363,7 +272,7 @@ export function LandingTour() {
             (time === 0
               ? "Press play. Follow a complete task, from a requirement to a reviewed selection."
               : time >= tourDuration - 0.1
-                ? "Built with Fabrials UI. Explore more examples below."
+                ? "Built with Fabrials UI. Try the tools in the playground."
                 : "\u00a0")}
         </p>
         <label className="mt-3 flex items-center gap-4">

@@ -1,4 +1,5 @@
 "use client";
+import { ToolPlayground } from "@/components/tool-playground";
 import { ComparisonDemo } from "@/components/comparison-demo";
 import { useState } from "react";
 import {
@@ -266,10 +267,14 @@ function Explorer({ compact = false }: { compact?: boolean }) {
     </div>
   );
 }
-export function ExplorerDemo(props: { compact?: boolean }) {
+export function ExplorerDemo(props: {
+  compact?: boolean;
+  playground?: boolean;
+}) {
   return (
     <WebMCPProvider>
       <Explorer {...props} />
+      {props.playground && <ToolPlayground />}
     </WebMCPProvider>
   );
 }
@@ -398,10 +403,11 @@ function Booking() {
     </div>
   );
 }
-export function BookingDemo() {
+export function BookingDemo({ playground = false }: { playground?: boolean }) {
   return (
     <WebMCPProvider>
       <Booking />
+      {playground && <ToolPlayground />}
     </WebMCPProvider>
   );
 }

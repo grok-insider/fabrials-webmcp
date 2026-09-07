@@ -75,14 +75,14 @@ export function SiteHeader() {
             Components
           </Link>
           <Link
-            href="/examples"
+            href="/playground"
             className={
-              path.startsWith("/examples")
+              path.startsWith("/playground")
                 ? "text-foreground"
                 : "text-muted-foreground hover:text-foreground"
             }
           >
-            Examples
+            Playground
           </Link>
         </nav>
         <div className="flex items-center gap-3">
@@ -117,7 +117,7 @@ export function SiteHeader() {
         >
           <Link href="/docs/introduction">Documentation</Link>
           <Link href="/components">Components</Link>
-          <Link href="/examples">Examples</Link>
+          <Link href="/playground">Playground</Link>
         </nav>
       )}
     </header>

@@ -1,4 +1,5 @@
 "use client";
+import { ToolPlayground } from "@/components/tool-playground";
 import { useRef, useState } from "react";
 import {
   ArrowRight,
@@ -32,10 +33,11 @@ const money = (n: number) =>
     currency: "EUR",
     maximumFractionDigits: 0,
   }).format(n);
-export function CoffeeDemo() {
+export function CoffeeDemo({ playground = false }: { playground?: boolean }) {
   return (
     <WebMCPProvider>
       <CoffeeWorkbench />
+      {playground && <ToolPlayground />}
     </WebMCPProvider>
   );
 }

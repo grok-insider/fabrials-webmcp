@@ -1,4 +1,5 @@
 "use client";
+import { ToolPlayground } from "@/components/tool-playground";
 import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Label } from "@/components/ui/label";
@@ -8,10 +9,15 @@ import { ConfirmationDialog } from "@/registry/components/confirmation-dialog";
 import { Wizard } from "@/registry/components/wizard";
 import { WebMCPProvider, useWebMCPTool } from "@/registry/webmcp/provider";
 
-export function TravelExample() {
+export function TravelExample({
+  playground = false,
+}: {
+  playground?: boolean;
+}) {
   return (
     <WebMCPProvider>
       <TravelPlanner />
+      {playground && <ToolPlayground />}
     </WebMCPProvider>
   );
 }
@@ -130,10 +136,15 @@ function TravelPlanner() {
   );
 }
 
-export function SupportExample() {
+export function SupportExample({
+  playground = false,
+}: {
+  playground?: boolean;
+}) {
   return (
     <WebMCPProvider>
       <SupportQueue />
+      {playground && <ToolPlayground />}
     </WebMCPProvider>
   );
 }
@@ -244,10 +255,15 @@ function SupportQueue() {
   );
 }
 
-export function OnboardingExample() {
+export function OnboardingExample({
+  playground = false,
+}: {
+  playground?: boolean;
+}) {
   return (
     <WebMCPProvider>
       <WorkspaceSetup />
+      {playground && <ToolPlayground />}
     </WebMCPProvider>
   );
 }

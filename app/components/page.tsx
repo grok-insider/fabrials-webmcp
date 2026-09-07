@@ -30,7 +30,7 @@ export default function Components() {
           </Link>
           <Link
             className="text-muted-foreground hover:text-foreground"
-            href="/examples"
+            href="/playground"
           >
             See them in use ↗
           </Link>

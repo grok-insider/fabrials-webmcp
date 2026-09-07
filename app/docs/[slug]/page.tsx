@@ -99,7 +99,7 @@ export default async function Docs({
                   belong to the example.
                 </p>
                 <Link
-                  href="/examples#comparison"
+                  href="/playground#comparison"
                   className="mt-2 inline-block underline underline-offset-4"
                 >
                   Explore the shopping example →

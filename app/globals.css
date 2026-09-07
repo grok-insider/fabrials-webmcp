@@ -250,11 +250,4 @@ html {
   .tour-theatre .comparison-table .mt-4 {
     margin-top: 8px;
   }
-  .tour-theatre aside svg {
-    display: none;
-  }
-  .tour-theatre aside > div {
-    margin-top: 12px;
-    margin-bottom: 12px;
-  }
 }

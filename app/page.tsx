@@ -41,10 +41,10 @@ export default function Home() {
               Start building <ArrowRight className="size-4" />
             </Link>
             <Link
-              href="/examples"
+              href="/playground"
               className="text-sm hover:underline underline-offset-4"
             >
-              Explore examples
+              Open playground
             </Link>
             <a
               href="#try-it"
@@ -106,7 +106,7 @@ export default function Home() {
         <LandingTour />
         <div className="mt-5 flex flex-wrap items-center justify-between gap-3 text-xs text-muted-foreground">
           <p>
-            Powered by the WebMCP provider, Comparison and Confirmation dialog.
+            Built with Comparison from the registry. Tool calls illustrated in sync.
           </p>
           <Link
             href="/docs/comparison"
@@ -127,10 +127,10 @@ export default function Home() {
             </h2>
           </div>
           <Link
-            href="/examples"
+            href="/playground"
             className="text-sm underline underline-offset-4"
           >
-            All seven examples →
+            Explore the playground →
           </Link>
         </div>
         <div className="grid gap-4 md:grid-cols-3">
@@ -156,7 +156,7 @@ export default function Home() {
           ].map(([id, label, title, detail], i) => (
             <Link
               key={id}
-              href={`/examples#${id}`}
+              href={`/playground#${id}`}
               className="group flex min-h-64 flex-col justify-between rounded-xl border bg-card p-7 hover:bg-muted/40"
             >
               <span className="flex justify-between font-mono text-xs text-muted-foreground">
@@ -241,8 +241,8 @@ export default function Home() {
             </p>
           </div>
         </div>
-        <Link href="/examples" className="flex items-center gap-2 text-sm">
-          Browse examples <ArrowRight className="size-4" />
+        <Link href="/playground" className="flex items-center gap-2 text-sm">
+          Open playground <ArrowRight className="size-4" />
         </Link>
       </section>
     </main>

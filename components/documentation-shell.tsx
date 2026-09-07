@@ -49,7 +49,7 @@ export function DocumentationShell({ children }: { children: ReactNode }) {
       links={[
         { text: "Home", url: "/" },
         { text: "Components", url: "/components" },
-        { text: "Examples", url: "/examples" },
+        { text: "Playground", url: "/playground" },
       ]}
       githubUrl="https://github.com/grok-insider/fabrials-webmcp"
       containerProps={{ className: "fabrials-docs" }}

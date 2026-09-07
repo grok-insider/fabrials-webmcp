@@ -51,3 +51,22 @@ it("validates workspace details before completing setup", async () => {
   await u.click(screen.getByRole("button", { name: "Complete" }));
   expect(screen.getByRole("status").textContent).toContain("11–50");
 });
+
+it("executes editable playground arguments against the visible travel state", async () => {
+  const u = userEvent.setup();
+  render(<TravelExample playground />);
+  const runner = within(
+    screen.getByRole("region", { name: "Tool playground" }),
+  );
+  await u.type(runner.getByLabelText(/budget/), "250");
+  await u.click(runner.getByRole("button", { name: "Execute tool" }));
+  expect(screen.getByText(/2 quiet stays/)).toBeTruthy();
+  await u.selectOptions(
+    runner.getByLabelText("Available tool"),
+    "shortlist_stay",
+  );
+  await u.selectOptions(runner.getByLabelText(/^id/), "garden");
+  await u.click(runner.getByRole("button", { name: "Execute tool" }));
+  expect(screen.getByText(/Garden Loft is on your shortlist/)).toBeTruthy();
+  expect(runner.getAllByText("success")).toHaveLength(2);
+});

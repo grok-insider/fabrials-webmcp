@@ -107,10 +107,10 @@ export function ComponentIndex() {
       <div className="mt-5 border-t py-8 text-sm text-muted-foreground">
         Looking for a complete flow?{" "}
         <Link
-          href="/examples"
+          href="/playground"
           className="font-medium text-foreground underline underline-offset-4"
         >
-          Explore the examples
+          Open the playground
         </Link>
         .
       </div>
