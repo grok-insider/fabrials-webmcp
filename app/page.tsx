@@ -73,20 +73,7 @@ export default function Home() {
               code="bunx shadcn@latest add https://ui.fabrials.com/r/webmcp-provider.json"
             />
           </div>
-          <div className="mt-5 flex items-center justify-between text-xs text-muted-foreground">
-            <span>Copy the code. Make it yours.</span>
-            <span>MIT ↗</span>
-          </div>
         </div>
-      </section>
-      <section className="mb-14 flex flex-wrap items-center gap-x-8 gap-y-3 border-y py-5 text-xs text-muted-foreground">
-        <span className="mr-auto text-[10px] uppercase tracking-[.12em]">
-          Open code. Native capabilities.
-        </span>
-        <span>React 19</span>
-        <span>shadcn / Base UI</span>
-        <span>Tailwind CSS 4</span>
-        <span>MIT licensed</span>
       </section>
       <section id="try-it" className="scroll-mt-24 pb-16">
         <div className="mb-8 flex flex-wrap items-end justify-between gap-5">
