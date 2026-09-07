@@ -1,4 +1,3 @@
-import { DemoVideo } from "@/components/demo-video";
 import Link from "next/link";
 import {
   ArrowRight,
@@ -8,12 +7,12 @@ import {
   Workflow,
   Code2,
 } from "lucide-react";
-import { CoffeeDemo } from "@/components/coffee-demo";
+import { LandingTour } from "@/components/landing-tour";
 import { CodeBlock } from "@/components/code-block";
 import { catalog } from "@/lib/catalog";
 export default function Home() {
   return (
-    <main id="main-content" className="mx-auto max-w-7xl px-6 lg:px-10">
+    <main id="main-content" className="w-full px-5 sm:px-8 lg:px-12 2xl:px-16">
       <section className="grid gap-10 pt-16 pb-14 lg:grid-cols-[1.25fr_1fr] lg:items-end lg:pt-24">
         <div>
           <Link
@@ -48,10 +47,10 @@ export default function Home() {
               Explore examples
             </Link>
             <a
-              href="#demo-video"
+              href="#try-it"
               className="inline-flex min-h-10 items-center gap-2 text-sm underline underline-offset-4"
             >
-              Watch demo <span aria-hidden="true">↗</span>
+              Play the tour <span aria-hidden="true">↗</span>
             </a>
           </div>
         </div>
@@ -100,11 +99,11 @@ export default function Home() {
             </h2>
           </div>
           <p className="max-w-sm text-sm leading-6 text-muted-foreground">
-            Play the narrated walkthrough, then take over or connect your own
-            agent. Explore the same interface, with the same shared state.
+            A guided journey from a requirement to a reviewed selection. Play
+            with sound, or explore the six chapters at your own pace.
           </p>
         </div>
-        <CoffeeDemo tour />
+        <LandingTour />
         <div className="mt-5 flex flex-wrap items-center justify-between gap-3 text-xs text-muted-foreground">
           <p>
             Powered by the WebMCP provider, Comparison and Confirmation dialog.
@@ -117,7 +116,63 @@ export default function Home() {
           </Link>
         </div>
       </section>
-      <DemoVideo />
+      <section className="border-t py-14">
+        <div className="mb-8 flex flex-wrap items-end justify-between gap-4">
+          <div>
+            <p className="text-xs uppercase tracking-wider text-muted-foreground">
+              Different tasks. Shared building blocks.
+            </p>
+            <h2 className="mt-3 text-3xl font-medium">
+              More ways to put agents to work.
+            </h2>
+          </div>
+          <Link
+            href="/examples"
+            className="text-sm underline underline-offset-4"
+          >
+            All seven examples →
+          </Link>
+        </div>
+        <div className="grid gap-4 md:grid-cols-3">
+          {[
+            [
+              "travel",
+              "Travel planning",
+              "A quiet stay, within budget.",
+              "Compare options and build a shortlist.",
+            ],
+            [
+              "support",
+              "Customer support",
+              "A clearer queue. A human decision.",
+              "Filter tickets and review each resolution.",
+            ],
+            [
+              "onboarding",
+              "Workspace setup",
+              "From blank form to ready to go.",
+              "Validate details across a guided flow.",
+            ],
+          ].map(([id, label, title, detail], i) => (
+            <Link
+              key={id}
+              href={`/examples#${id}`}
+              className="group flex min-h-64 flex-col justify-between rounded-xl border bg-card p-7 hover:bg-muted/40"
+            >
+              <span className="flex justify-between font-mono text-xs text-muted-foreground">
+                0{i + 1} / {label}
+                <ArrowUpRight className="size-4" />
+              </span>
+              <div>
+                <h3 className="mt-8 text-2xl font-medium tracking-tight">
+                  {title}
+                </h3>
+                <p className="mt-3 text-sm text-muted-foreground">{detail}</p>
+              </div>
+            </Link>
+          ))}
+        </div>
+      </section>
       <section className="border-t py-14">
         <div className="mb-8 flex items-end justify-between">
           <div>

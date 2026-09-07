@@ -1,7 +1,8 @@
 import type { Metadata } from "next";
-import { SiteHeader, SiteFooter } from "@/components/site-shell";
+import { SiteFrame } from "@/components/site-shell";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import "./globals.css";
+import { RootProvider } from "fumadocs-ui/provider/next";
 export const metadata: Metadata = {
   metadataBase: new URL("https://ui.fabrials.com"),
   title: {
@@ -22,13 +23,6 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en" suppressHydrationWarning>
-      <head>
-        <script
-          dangerouslySetInnerHTML={{
-            __html: `try{const t=localStorage.getItem('fabrials-ui-theme');if(t==='dark'||(!t&&matchMedia('(prefers-color-scheme: dark)').matches))document.documentElement.classList.add('dark')}catch{}`,
-          }}
-        />
-      </head>
       <body>
         <a
           href="#main-content"
@@ -36,11 +30,13 @@ export default function RootLayout({
         >
           Skip to content
         </a>
-        <TooltipProvider>
-          <SiteHeader />
-          {children}
-          <SiteFooter />
-        </TooltipProvider>
+        <RootProvider
+          theme={{ storageKey: "fabrials-ui-theme", hotKey: false }}
+        >
+          <TooltipProvider>
+            <SiteFrame>{children}</SiteFrame>
+          </TooltipProvider>
+        </RootProvider>
       </body>
     </html>
   );

@@ -3,7 +3,16 @@ import { readFile } from "node:fs/promises";
 import { notFound } from "next/navigation";
 import { MDXRemote } from "next-mdx-remote/rsc";
 import { catalog, guides } from "@/lib/catalog";
-import { DocsSidebar } from "@/components/site-shell";
+import { DocumentationShell } from "@/components/documentation-shell";
+import {
+  DocsPage,
+  DocsTitle,
+  DocsDescription,
+  DocsBody,
+} from "fumadocs-ui/layouts/docs/page";
+import defaultMdxComponents from "fumadocs-ui/mdx";
+import rehypeSlug from "rehype-slug";
+import { getTableOfContents } from "fumadocs-core/content/toc";
 import { ComponentPreview } from "@/components/component-preview";
 import { CodeBlock } from "@/components/code-block";
 export function generateStaticParams() {
@@ -33,28 +42,33 @@ export default async function Docs({
   let source = "";
   if (item) source = await readFile(item.files[0], "utf8");
   const mdx = await readFile(`content/${slug}.mdx`, "utf8").catch(() => "");
+  const contentToc = getTableOfContents(mdx);
   return (
-    <main id="main-content" className="docs-layout">
-      <DocsSidebar />
-      <article className="w-full min-w-0 flex-1 pb-16 xl:max-w-4xl">
-        <p className="mb-4 flex items-center gap-2 text-xs text-muted-foreground">
-          <Link
-            href={item ? "/components" : "/docs/introduction"}
-            className="hover:text-foreground"
-          >
-            {item ? "Components" : "Guides"}
-          </Link>
-          <span aria-hidden="true">/</span>
-          {item?.category ?? "Documentation"}
-        </p>
-        <h1 className="text-4xl font-medium tracking-[-.045em]">
-          {item?.title ?? guide?.title}
-        </h1>
+    <DocumentationShell>
+      <DocsPage
+        id="main-content"
+        full
+        toc={
+          item
+            ? [
+                { title: "Preview", url: "#preview", depth: 2 },
+                { title: "Installation", url: "#installation", depth: 2 },
+                { title: "API", url: "#api", depth: 2 },
+                {
+                  title: "Behavior & compatibility",
+                  url: "#behavior",
+                  depth: 2,
+                },
+                { title: "Accessibility", url: "#accessibility", depth: 2 },
+                ...contentToc,
+              ]
+            : contentToc
+        }
+      >
+        <DocsTitle>{item?.title ?? guide?.title}</DocsTitle>
+        {item && <DocsDescription>{item.description}</DocsDescription>}
         {item && (
           <>
-            <p className="mt-4 mb-8 max-w-xl text-base leading-7 text-muted-foreground">
-              {item.description}
-            </p>
             {slug === "server-connector" ? (
               <div className="mb-8 rounded-lg border bg-muted/40 p-5 text-sm leading-7">
                 This is a Node server adapter. Install it on your backend and
@@ -156,38 +170,18 @@ export default async function Docs({
           </>
         )}
         {mdx && (
-          <div className="doc-prose">
+          <DocsBody>
             <MDXRemote
               source={mdx}
-              components={{ pre: (props) => <pre {...props} tabIndex={0} /> }}
+              options={{ mdxOptions: { rehypePlugins: [rehypeSlug] } }}
+              components={{
+                ...defaultMdxComponents,
+                pre: (props) => <pre {...props} tabIndex={0} />,
+              }}
             />
-          </div>
+          </DocsBody>
         )}
-      </article>
-      {item && (
-        <aside className="sticky top-28 hidden w-36 shrink-0 text-xs 2xl:block">
-          <nav aria-label="On this page" className="space-y-4">
-            <p className="font-medium">On this page</p>
-            {[
-              ["preview", "Preview"],
-              ["installation", "Installation"],
-              ["api", "API"],
-              ["behavior", "Behavior"],
-              ["accessibility", "Accessibility"],
-            ]
-              .filter(([id]) => id !== "preview" || slug !== "server-connector")
-              .map(([id, label]) => (
-                <a
-                  key={id}
-                  href={`#${id}`}
-                  className="block text-muted-foreground hover:text-foreground"
-                >
-                  {label}
-                </a>
-              ))}
-          </nav>
-        </aside>
-      )}
-    </main>
+      </DocsPage>
+    </DocumentationShell>
   );
 }

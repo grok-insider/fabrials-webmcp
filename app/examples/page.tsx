@@ -1,3 +1,8 @@
+import {
+  TravelExample,
+  SupportExample,
+  OnboardingExample,
+} from "@/components/workflow-examples";
 import Link from "next/link";
 import { ArrowDownRight } from "lucide-react";
 import { CoffeeDemo } from "@/components/coffee-demo";
@@ -8,7 +13,7 @@ export default function Examples() {
   return (
     <main
       id="main-content"
-      className="mx-auto max-w-[1440px] space-y-16 px-6 py-12 lg:px-10"
+      className="w-full space-y-16 px-6 py-12 lg:px-12 2xl:px-16"
     >
       <header>
         <p className="mb-4 text-[11px] uppercase tracking-[.15em] text-muted-foreground">
@@ -49,6 +54,24 @@ export default function Examples() {
             "04",
             "MCP workspace",
             "Connect to a server, discover its tools and inspect results.",
+          ],
+          [
+            "travel",
+            "05",
+            "Travel planner",
+            "Compare stays against a budget and shortlist a quiet location.",
+          ],
+          [
+            "support",
+            "06",
+            "Support inbox",
+            "Filter a queue and keep resolution behind human review.",
+          ],
+          [
+            "onboarding",
+            "07",
+            "Workspace setup",
+            "Collect details, validate each step and review a new workspace.",
           ],
         ].map(([id, number, title, description]) => (
           <a
@@ -150,6 +173,54 @@ export default function Examples() {
         />
         <div className="rounded-xl border bg-card p-5 sm:p-8">
           <MCPDashboard defaultEndpoint="/api/demo/mcp" />
+        </div>
+      </section>
+      <section id="travel" className="scroll-mt-24 border-t pt-10">
+        <h2 className="text-2xl font-medium">05 / Plan a quieter weekend</h2>
+        <p className="my-4 text-sm text-muted-foreground">
+          Compare stays with your budget and preferences. An agent can highlight
+          matches and build the same shortlist.
+        </p>
+        <ComponentLinks
+          slugs={[
+            ["comparison", "Comparison"],
+            ["webmcp-provider", "WebMCP provider"],
+          ]}
+        />
+        <div className="rounded-xl border bg-card p-5 sm:p-8">
+          <TravelExample />
+        </div>
+      </section>
+      <section id="support" className="scroll-mt-24 border-t pt-10">
+        <h2 className="text-2xl font-medium">06 / Triage a support queue</h2>
+        <p className="my-4 text-sm text-muted-foreground">
+          Filter the inbox, inspect a ticket and review its resolution before
+          applying the change.
+        </p>
+        <ComponentLinks
+          slugs={[
+            ["confirmation-dialog", "Confirmation"],
+            ["webmcp-provider", "WebMCP provider"],
+          ]}
+        />
+        <div className="rounded-xl border bg-card p-5 sm:p-8">
+          <SupportExample />
+        </div>
+      </section>
+      <section id="onboarding" className="scroll-mt-24 border-t pt-10">
+        <h2 className="text-2xl font-medium">07 / Set up a workspace</h2>
+        <p className="my-4 text-sm text-muted-foreground">
+          A validated multi-step flow that an agent can prepare and a person can
+          finish.
+        </p>
+        <ComponentLinks
+          slugs={[
+            ["wizard", "Multi-step flow"],
+            ["webmcp-provider", "WebMCP provider"],
+          ]}
+        />
+        <div className="rounded-xl border bg-card p-5 sm:p-8">
+          <OnboardingExample />
         </div>
       </section>
     </main>

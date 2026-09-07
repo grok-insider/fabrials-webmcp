@@ -2,10 +2,10 @@
 import Link from "next/link";
 import { GitHubLink } from "@/components/github-link";
 import { usePathname } from "next/navigation";
-import { useEffect, useState } from "react";
-import { Moon, Sun, Menu, X, Search } from "lucide-react";
+import { useEffect, useState, type ReactNode } from "react";
+import { Moon, Sun, Menu, X } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
+import { useTheme } from "next-themes";
 import { catalog, guides } from "@/lib/catalog";
 export function Mark() {
   return (
@@ -26,16 +26,16 @@ export function Mark() {
   );
 }
 export function SiteHeader() {
-  const [dark, setDark] = useState(false);
+  const { resolvedTheme, setTheme } = useTheme();
+  const [mounted, setMounted] = useState(false);
+  const dark = mounted && resolvedTheme === "dark";
   const [menu, setMenu] = useState(false);
   const path = usePathname();
-  useEffect(() => {
-    setDark(document.documentElement.classList.contains("dark"));
-  }, []);
+  useEffect(() => setMounted(true), []);
   useEffect(() => setMenu(false), [path]);
   return (
     <header className="sticky top-0 z-40 border-b bg-background/95 backdrop-blur-sm">
-      <div className="mx-auto flex h-17 max-w-[1600px] items-center justify-between gap-5 px-6 lg:px-10">
+      <div className="flex h-17 w-full items-center justify-between gap-5 px-6 lg:px-10">
         <Link
           href="/"
           className="flex items-center gap-2.5 font-medium tracking-tight"
@@ -93,15 +93,7 @@ export function SiteHeader() {
             variant="ghost"
             aria-label={dark ? "Use light theme" : "Use dark theme"}
             onClick={() => {
-              const value = !dark;
-              setDark(value);
-              document.documentElement.classList.toggle("dark", value);
-              try {
-                localStorage.setItem(
-                  "fabrials-ui-theme",
-                  value ? "dark" : "light",
-                );
-              } catch {}
+              setTheme(dark ? "light" : "dark");
             }}
           >
             {dark ? <Sun className="size-4" /> : <Moon className="size-4" />}
@@ -131,94 +123,22 @@ export function SiteHeader() {
     </header>
   );
 }
-export function DocsSidebar() {
+export function SiteFrame({ children }: { children: ReactNode }) {
   const path = usePathname();
-  const [query, setQuery] = useState("");
+  if (path.startsWith("/docs") || path === "/components")
+    return <>{children}</>;
   return (
-    <aside className="docs-sidebar w-full shrink-0 lg:sticky lg:top-24 lg:h-[calc(100dvh-7rem)] lg:w-52 lg:overflow-y-auto lg:pr-4">
-      <details className="lg:hidden">
-        <summary className="mb-4 rounded-md border p-3 text-sm">
-          Browse documentation
-        </summary>
-        <SidebarContent />
-      </details>
-      <div className="hidden lg:block">
-        <div className="relative mb-7">
-          <Search className="absolute top-2 left-2.5 size-3.5 text-muted-foreground" />
-          <Input
-            aria-label="Find a component"
-            placeholder="Find a component…"
-            value={query}
-            onChange={(e) => setQuery(e.target.value)}
-            className="h-8 pl-8 text-xs"
-          />
-        </div>
-        <SidebarContent />
-      </div>
-    </aside>
+    <>
+      <SiteHeader />
+      {children}
+      <SiteFooter />
+    </>
   );
-  function SidebarContent() {
-    return (
-      <nav aria-label="Documentation">
-        <Link
-          href="/components"
-          aria-current={path === "/components" ? "page" : undefined}
-          className={`mb-6 block rounded-md px-2 py-2 text-sm ${path === "/components" ? "bg-muted font-medium" : "text-muted-foreground hover:text-foreground"}`}
-        >
-          All components
-        </Link>
-        <div className="mb-7">
-          <p className="mb-3 px-2 text-[11px] font-medium uppercase tracking-[.12em] text-muted-foreground">
-            Get started
-          </p>
-          {guides
-            .filter((g) => g.title.toLowerCase().includes(query.toLowerCase()))
-            .map((g) => (
-              <Link
-                key={g.slug}
-                href={`/docs/${g.slug}`}
-                aria-current={path === `/docs/${g.slug}` ? "page" : undefined}
-                className={`mb-0.5 block rounded-md px-2 py-1.5 text-[13px] ${path === `/docs/${g.slug}` ? "bg-muted font-medium" : "text-muted-foreground hover:bg-muted/60 hover:text-foreground"}`}
-              >
-                {g.title}
-              </Link>
-            ))}
-        </div>
-        {(["WebMCP", "Interaction", "MCP", "Foundation"] as const).map(
-          (category) => (
-            <div key={category} className="mb-7">
-              <p className="mb-3 px-2 text-[11px] font-medium uppercase tracking-[.12em] text-muted-foreground">
-                {category}
-              </p>
-              {catalog
-                .filter(
-                  (c) =>
-                    c.category === category &&
-                    c.title.toLowerCase().includes(query.toLowerCase()),
-                )
-                .map((c) => (
-                  <Link
-                    key={c.slug}
-                    href={`/docs/${c.slug}`}
-                    aria-current={
-                      path === `/docs/${c.slug}` ? "page" : undefined
-                    }
-                    className={`mb-0.5 block rounded-md px-2 py-1.5 text-[13px] ${path === `/docs/${c.slug}` ? "bg-muted font-medium" : "text-muted-foreground hover:bg-muted/60 hover:text-foreground"}`}
-                  >
-                    {c.title}
-                  </Link>
-                ))}
-            </div>
-          ),
-        )}
-      </nav>
-    );
-  }
 }
 export function SiteFooter() {
   return (
     <footer className="border-t">
-      <div className="mx-auto flex max-w-[1600px] flex-wrap items-center justify-between gap-4 px-6 py-8 text-xs text-muted-foreground lg:px-10">
+      <div className="flex w-full flex-wrap items-center justify-between gap-4 px-6 py-8 text-xs text-muted-foreground lg:px-10">
         <p>
           Made at{" "}
           <a

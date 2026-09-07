@@ -1,38 +1,25 @@
-## Play the live interface
+## A single guided tour
 
-The [landing demo](/#try-it) has two modes. Automatic plays the existing film’s narration and music while updating the actual comparison and cart. Pause, mute, restart or seek through the 66-second tour. Captions use the same speech alignment as the film. “Follow actions on the page” keeps the current control in view; turn it off to scroll freely.
+The [landing tour](/#try-it) follows a complete task in six chapters: requirements, evidence, selection and review. It uses the original narration and music, with synchronized subtitles and a compact comparison and result view.
 
-Choose **Take control**, switch to **Manual**, or use any demo control to stop playback and keep the current selection. Starting Automatic again resets the guided demo. The original video and all source audio remain available separately.
+Press **Play tour** to begin. Pause, mute, restart, scrub the timeline or select a chapter to explore at your own pace. The tour does not scroll the page or switch into a manual mode. You can follow every stage without connecting an agent.
 
-## Connect an MCP client
+## Try the working examples
 
-1. Switch the landing demo to **Manual**.
-2. Expand **Connect your agent via MCP** and choose **Create MCP connection**.
-3. Copy the generated configuration into a client that supports Streamable HTTP with a custom Authorization header. Configuration syntax varies by client: use the displayed URL as the server URL and the displayed Authorization value as the header.
-4. Keep the browser tab open. Ask the agent to read the state, compare machines and change your selection.
+Open [Examples](/examples) for hands-on flows. These use the same registry components and shared state as their WebMCP tools:
 
-No Fabrials account or API key is required for this fictional demo. The generated bearer token is a temporary capability for your tab only. Do not put it in a URL or share it publicly. **Disconnect agent** revokes it. Refreshing, leaving the page or switching to Automatic ends the connection.
+- [Shopping](/examples#comparison): compare machines and review a selection.
+- [Project explorer](/examples#explorer): filter and select records.
+- [Reservation](/examples#reservation): choose dates and validate a booking flow.
+- [MCP workspace](/examples#console): connect to a remote server and inspect its tools.
+- [Travel planner](/examples#travel): find a quiet stay within a budget.
+- [Support inbox](/examples#support): filter tickets and review a resolution.
+- [Workspace setup](/examples#onboarding): prepare and complete a validated setup.
 
-Try: “Compare machines for a 40 cm counter and 54 mm accessories. Choose the compatible machine and open the selection for my review.”
+Fictional examples do not place orders, create accounts or make reservations. Their ordinary controls work without WebMCP.
 
-## Available tools
+## Media and implementation
 
-- `get_coffee_state`: read constraints, comparison and the current cart.
-- `compare_coffee_machines`: highlight evidence for a counter width and accessory fitting.
-- `set_coffee_cart`: select a fictional machine, or clear the cart.
-- `set_coffee_filter`: add or remove the compatible filter; requires a machine.
-- `review_coffee_cart`: open a review for the human. Only the human saves the demo selection.
+The video player has been removed from the landing. The original film, narration, music and subtitle assets are preserved. The tour uses an AAC stream copy of the original film, served with byte ranges from S3, and shares the film's timing and captions.
 
-Manual controls, native WebMCP and the remote MCP connection use the same browser state. These actions never place an order or make a payment. Native WebMCP is optional: the remote connection works in browsers without it.
-
-## Session behavior
-
-Connections expire after 30 minutes, or after the tab stops checking for commands for 45 seconds. A deployment also ends active sessions. Create a new connection when the page reports disconnection.
-
-If an action times out, it may already have run. Inspect the visible state or call `get_coffee_state` before deciding whether to repeat it. The bridge does not replay commands automatically.
-
-## Hosting the demo
-
-This example uses a bounded, in-memory session broker in a single Node process. It is not a general remote-browser proxy. Only the five coffee tools are exposed; client and browser credentials are separate. Tokens, commands and results are never persisted or logged by application code. A multi-replica deployment needs a shared transient broker before scaling this route.
-
-The soundtrack is an AAC stream copy from the existing MP4, served with byte ranges from house S3. `video:render` also extracts it as `demo-audio.m4a`; publishing with `PUBLISH_ASSET=demo-audio.m4a` updates only that object. Playback state and the original Remotion film share their timing and captions.
+`video:render` still produces the film and extracts `demo-audio.m4a`. `PUBLISH_ASSET=demo-audio.m4a` publishes only the soundtrack. Changing the interface does not require regenerating the voice.

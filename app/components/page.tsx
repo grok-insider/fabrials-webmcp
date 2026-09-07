@@ -1,5 +1,10 @@
 import Link from "next/link";
-import { DocsSidebar } from "@/components/site-shell";
+import { DocumentationShell } from "@/components/documentation-shell";
+import {
+  DocsPage,
+  DocsTitle,
+  DocsDescription,
+} from "fumadocs-ui/layouts/docs/page";
 import { ComponentIndex } from "@/components/component-index";
 export const metadata = {
   title: "Components",
@@ -8,17 +13,14 @@ export const metadata = {
 };
 export default function Components() {
   return (
-    <main id="main-content" className="docs-layout">
-      <DocsSidebar />
-      <article className="min-w-0 flex-1 pb-12">
+    <DocumentationShell>
+      <DocsPage id="main-content" full>
         <p className="mb-4 text-xs text-muted-foreground">The registry</p>
-        <h1 className="text-4xl font-medium tracking-tight sm:text-5xl">
-          Components
-        </h1>
-        <p className="mt-5 max-w-2xl text-base leading-7 text-muted-foreground">
+        <DocsTitle>Components</DocsTitle>
+        <DocsDescription>
           Reusable pieces for interfaces that people and agents can use
           together. Browse, preview and copy them into your app.
-        </p>
+        </DocsDescription>
         <div className="mt-5 flex gap-5 text-sm">
           <Link
             className="underline underline-offset-4"
@@ -34,7 +36,7 @@ export default function Components() {
           </Link>
         </div>
         <ComponentIndex />
-      </article>
-    </main>
+      </DocsPage>
+    </DocumentationShell>
   );
 }

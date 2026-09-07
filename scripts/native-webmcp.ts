@@ -19,6 +19,12 @@ try {
   const page = await browser.newPage();
   const origin = process.env.TEST_ORIGIN ?? "http://localhost:3210";
   await page.goto(origin);
+  assert.equal(
+    await page.getByRole("button", { name: "Manual", exact: true }).count(),
+    0,
+  );
+  assert.equal(await page.locator("video").count(), 0);
+  await page.goto(`${origin}/examples#comparison`);
   await page.waitForFunction(async () =>
     (
       await (
@@ -75,6 +81,46 @@ try {
   );
   console.log(
     "Native coffee comparison, conditional cart tools, human correction and review passed.",
+  );
+  await execute("find_quiet_stays", { budget: 180 });
+  await page
+    .locator("#travel")
+    .getByRole("status")
+    .filter({ hasText: "1 quiet stays" })
+    .waitFor();
+  await execute("shortlist_stay", { id: "canal" });
+  await page
+    .locator("#travel")
+    .getByRole("status")
+    .filter({ hasText: "Canal House" })
+    .waitFor();
+  await execute("filter_support_queue", { priority: "High" });
+  assert.equal(
+    await page.locator("#support").getByText("Invoice address update").count(),
+    0,
+  );
+  await execute("prepare_ticket_resolution", { id: "SUP-104" });
+  await page.getByRole("dialog").waitFor();
+  await page
+    .getByRole("button", { name: "Resolve ticket", exact: true })
+    .click();
+  await page
+    .locator("#support")
+    .getByRole("status")
+    .filter({ hasText: "1 resolved" })
+    .waitFor();
+  await execute("prepare_workspace", { name: "Field ops", size: "11–50" });
+  await page
+    .locator("#onboarding")
+    .getByRole("button", { name: "Complete", exact: true })
+    .click();
+  await page
+    .locator("#onboarding")
+    .getByRole("status")
+    .filter({ hasText: "11–50" })
+    .waitFor();
+  console.log(
+    "Native travel, support review and workspace preparation passed.",
   );
   await page.goto(
     `${process.env.TEST_ORIGIN ?? "http://localhost:3210"}/examples#explorer`,
