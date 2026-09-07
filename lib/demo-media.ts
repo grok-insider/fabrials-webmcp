@@ -1,5 +1,9 @@
 import { createHash, createHmac } from "node:crypto";
 export const demoAssets = {
+  "landing-audio.m4a": {
+    key: "videos/fabrials-ui/landing-v1/landing-audio.m4a",
+    type: "audio/mp4",
+  },
   "demo-audio.m4a": {
     key: "videos/fabrials-ui/v4/demo-audio.m4a",
     type: "audio/mp4",

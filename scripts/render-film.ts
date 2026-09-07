@@ -81,5 +81,6 @@ if (frames) {
     "-y",
     "artifacts/remotion-film/demo-audio.m4a",
   ]);
+  await import("./prepare-landing-audio");
   console.log("Remotion film complete");
 }

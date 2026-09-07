@@ -6,7 +6,8 @@ import { Button } from "@/components/ui/button";
 import { Comparison } from "@/registry/components/comparison";
 import { CoffeeMachine } from "@/components/coffee-machine";
 import { coffeeProducts } from "@/lib/coffee-demo";
-import { tourDuration, tourSnapshot } from "@/lib/coffee-tour";
+import { tourSnapshot } from "@/lib/coffee-tour";
+import { landingTourDuration as tourDuration } from "@/lib/landing-tour";
 import captions from "@/video/remotion/captions.json";
 import timing from "@/video/remotion/timing.json";
 const chapters = [
@@ -40,7 +41,10 @@ export function LandingTour() {
     if (!playing) return;
     let frame = 0;
     const tick = () => {
-      if (media.current) setTime(media.current.currentTime);
+      if (media.current) {
+        if (media.current.currentTime >= tourDuration) media.current.pause();
+        setTime(Math.min(media.current.currentTime, tourDuration));
+      }
       frame = requestAnimationFrame(tick);
     };
     frame = requestAnimationFrame(tick);
@@ -92,7 +96,7 @@ export function LandingTour() {
     <div className="tour-theatre overflow-clip rounded-2xl border bg-card">
       <audio
         ref={media}
-        src="/api/demo-media/demo-audio.m4a?v=1"
+        src="/api/demo-media/landing-audio.m4a?v=1"
         preload="none"
         onPlay={() => setPlaying(true)}
         onPause={() => setPlaying(false)}
@@ -101,7 +105,11 @@ export function LandingTour() {
           setTime(tourDuration);
         }}
         onTimeUpdate={() => {
-          if (media.current) setTime(media.current.currentTime);
+          if (media.current) {
+            if (media.current.currentTime >= tourDuration)
+              media.current.pause();
+            setTime(Math.min(media.current.currentTime, tourDuration));
+          }
         }}
         onError={() => {
           setPlaying(false);
@@ -115,12 +123,14 @@ export function LandingTour() {
             THE MORNING RITUAL / A NARRATED PRODUCT TOUR
           </p>
           <h3 className="mt-1 text-lg font-medium">
-            {chapters[chapter].title}
+            {time >= tourDuration - 0.1
+              ? "Your choice. Your decision."
+              : chapters[chapter].title}
           </h3>
         </div>
         <div className="flex items-center gap-2">
           <span className="mr-3 hidden text-xs text-muted-foreground sm:inline">
-            66 seconds · sound on
+            53 seconds · sound on
           </span>
           <Button
             onClick={() => (playing ? media.current?.pause() : void play())}
@@ -288,7 +298,7 @@ export function LandingTour() {
             className="h-6 min-w-0 flex-1 accent-current"
           />
           <span className="w-20 text-right font-mono text-xs text-muted-foreground">
-            {Math.floor(time)} / 66 s
+            {Math.floor(time)} / {Math.ceil(tourDuration)} s
           </span>
         </label>
         {error && (

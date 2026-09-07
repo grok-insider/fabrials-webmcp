@@ -13,6 +13,7 @@
     "test": "vitest run",
     "test:registry": "tsx scripts/smoke-registry.ts",
     "test:native": "tsx scripts/native-webmcp.ts",
+    "video:landing-audio": "tsx scripts/prepare-landing-audio.ts",
     "video:publish": "tsx scripts/publish-demo.ts",
     "video:voice": "tsx scripts/generate-voice.ts",
     "video:music": "tsx scripts/generate-music.ts",

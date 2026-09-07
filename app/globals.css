@@ -251,3 +251,19 @@ html {
     margin-top: 8px;
   }
 }
+
+.tour-type-caret {
+  border-left: 2px solid currentColor;
+  margin-left: 1px;
+  animation: tour-caret 0.8s step-end infinite;
+}
+@keyframes tour-caret {
+  50% {
+    border-color: transparent;
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .tour-type-caret {
+    animation: none;
+  }
+}

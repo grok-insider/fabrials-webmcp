@@ -24,3 +24,25 @@ it("keeps illustrated calls, human correction and totals synchronized when seeki
       .getAttribute("aria-expanded"),
   ).toBe("false");
 });
+
+it("types the request from tour time and rewinds with the timeline", () => {
+  const { container, rerender } = render(<TourAgentPanel time={0} />);
+  expect(container.querySelector("[data-tour-typed]")?.textContent).toBe("");
+  rerender(<TourAgentPanel time={3} />);
+  const partial =
+    container.querySelector("[data-tour-typed]")?.textContent ?? "";
+  expect(partial.length).toBeGreaterThan(10);
+  expect(partial).not.toContain("accessories");
+  rerender(<TourAgentPanel time={6} />);
+  expect(container.querySelector("[data-tour-typed]")?.textContent).toContain(
+    "58 mm accessories.",
+  );
+  rerender(<TourAgentPanel time={0} />);
+  expect(container.querySelector("[data-tour-typed]")?.textContent).toBe("");
+});
+it("shows a human review summary without an empty JSON block", () => {
+  const { container } = render(<TourAgentPanel time={tourCues.review + 1} />);
+  expect(screen.getByText("Ready for your review")).toBeTruthy();
+  expect(screen.getByText("Studio Dual")).toBeTruthy();
+  expect(container.querySelector("pre")).toBeNull();
+});
