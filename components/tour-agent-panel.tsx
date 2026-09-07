@@ -10,7 +10,11 @@ import {
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { tourCues, tourSnapshot } from "@/lib/coffee-tour";
-import { landingPrompt, landingPromptLength } from "@/lib/landing-tour";
+import {
+  landingPrompt,
+  landingPromptLength,
+  landingPromptStart,
+} from "@/lib/landing-tour";
 import { coffeeTotal } from "@/lib/coffee-demo";
 const actions = [
   {
@@ -101,7 +105,11 @@ export function TourAgentPanel({ time }: { time: number }) {
           <span aria-hidden="true" className="motion-reduce:hidden">
             “<span data-tour-typed>{landingPrompt.slice(0, typed)}</span>
             <span
-              className={typed < landingPrompt.length ? "tour-type-caret" : ""}
+              className={
+                time >= landingPromptStart && typed < landingPrompt.length
+                  ? "tour-type-caret"
+                  : ""
+              }
             />
             <span className="invisible">{landingPrompt.slice(typed)}</span>
             <span className={typed < landingPrompt.length ? "invisible" : ""}>

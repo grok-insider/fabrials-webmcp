@@ -102,3 +102,8 @@ Reproduce consumer installation with a local dev server running and `bun run tes
 - Tool cards lead with readable actions/results and expandable technical details. Review presents Studio Dual, price and removed optional filter; the empty JSON object is replaced with an explanation of the current-selection input.
 - TypeScript/ESLint, 52 tests, production site/registry build and fresh Vite/Next.js registry installs/builds pass. Chrome verifies progressive typing, pause/seek/restart, reduced motion, review details, actual 52.466667 s media duration, automatic ending and replay. Landing passes desktop/mobile light/dark axe WCAG A/AA with no overflow.
 - Published dcbd08f via Coolify wxyamclzglrndwmqo4vpmzo2 (finished). Production Chrome passes typing, pause/rewind, reduced motion, review details, actual 52.466667-second ending/replay and desktop/mobile light/dark accessibility checks. New landing media serves valid 206 byte ranges. Original full soundtrack and current v=5 social film retain their sizes and 206 behavior. All 20 public registry items match the locally smoke-tested build.
+
+## Request typing aligned to narration · 2026-09-07
+
+- Request typing and its caret now begin at the caption-aligned “Two flat whites.” cue (10.02 s), keeping the existing 5.2-second typing duration. The cue is read from narration captions. Updated timeline test confirms no text at 10 s, progressive text at 12.5 s, completion at 15.3 s and reset.
+- TypeScript/ESLint, 52 tests and production site/registry build pass. All 20 published registry items match the unchanged local registry.

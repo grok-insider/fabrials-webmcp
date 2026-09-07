@@ -28,12 +28,14 @@ it("keeps illustrated calls, human correction and totals synchronized when seeki
 it("types the request from tour time and rewinds with the timeline", () => {
   const { container, rerender } = render(<TourAgentPanel time={0} />);
   expect(container.querySelector("[data-tour-typed]")?.textContent).toBe("");
-  rerender(<TourAgentPanel time={3} />);
+  rerender(<TourAgentPanel time={10} />);
+  expect(container.querySelector("[data-tour-typed]")?.textContent).toBe("");
+  rerender(<TourAgentPanel time={12.5} />);
   const partial =
     container.querySelector("[data-tour-typed]")?.textContent ?? "";
   expect(partial.length).toBeGreaterThan(10);
   expect(partial).not.toContain("accessories");
-  rerender(<TourAgentPanel time={6} />);
+  rerender(<TourAgentPanel time={15.3} />);
   expect(container.querySelector("[data-tour-typed]")?.textContent).toContain(
     "58 mm accessories.",
   );
