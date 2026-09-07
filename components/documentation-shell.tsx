@@ -2,7 +2,7 @@ import type { ReactNode } from "react";
 import { DocsLayout } from "fumadocs-ui/layouts/docs";
 import type { Root } from "fumadocs-core/page-tree";
 import { catalog, guides } from "@/lib/catalog";
-import { Mark } from "@/components/site-shell";
+import { DocsToolbar } from "@/components/docs-toolbar";
 const tree: Root = {
   name: "Fabrials UI",
   children: [
@@ -38,20 +38,9 @@ export function DocumentationShell({ children }: { children: ReactNode }) {
   return (
     <DocsLayout
       tree={tree}
-      nav={{
-        title: (
-          <span className="flex items-center gap-2">
-            <Mark />
-            fabrials <span className="text-muted-foreground">/ ui</span>
-          </span>
-        ),
-      }}
-      links={[
-        { text: "Home", url: "/" },
-        { text: "Components", url: "/components" },
-        { text: "Playground", url: "/playground" },
-      ]}
-      githubUrl="https://github.com/grok-insider/fabrials-webmcp"
+      nav={{ title: "Documentation", url: "/docs/introduction" }}
+      slots={{ header: DocsToolbar }}
+      themeSwitch={{ enabled: false }}
       containerProps={{ className: "fabrials-docs" }}
     >
       {children}

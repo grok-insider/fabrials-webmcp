@@ -4,7 +4,19 @@ Start with a React 19 application configured for Tailwind 4 and shadcn **Base UI
 
 For a new app, run `bunx shadcn@latest create` and select Base UI. For an existing React or Next.js app, run `bunx shadcn@latest init` and configure your CSS and import aliases. Use the Nova style for the same defaults as this site.
 
-## Install a component
+## Enable native WebMCP in Chrome
+
+<WebMCPSetup />
+
+## Add browser tools to your interface
+
+```bash
+bunx shadcn@latest add https://ui.fabrials.com/r/webmcp-provider.json
+```
+
+Wrap your interactive view in `WebMCPProvider`, then register an application action with `useWebMCPTool`. Follow the complete [WebMCP example](/docs/webmcp#register-an-application-action) or try a [working playground scenario](/playground).
+
+## Connect to a remote MCP server
 
 ```bash
 bunx shadcn@latest add https://ui.fabrials.com/r/mcp-dashboard.json

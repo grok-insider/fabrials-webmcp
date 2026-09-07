@@ -1,3 +1,5 @@
+import { isValidElement } from "react";
+import { WebMCPSetup } from "@/components/webmcp-setup";
 import Link from "next/link";
 import { readFile } from "node:fs/promises";
 import { notFound } from "next/navigation";
@@ -176,7 +178,29 @@ export default async function Docs({
               options={{ mdxOptions: { rehypePlugins: [rehypeSlug] } }}
               components={{
                 ...defaultMdxComponents,
-                pre: (props) => <pre {...props} tabIndex={0} />,
+                WebMCPSetup,
+                pre: ({ children }) => {
+                  if (
+                    isValidElement<{ children: string; className?: string }>(
+                      children,
+                    ) &&
+                    typeof children.props.children === "string"
+                  ) {
+                    return (
+                      <div className="not-prose my-6">
+                        <CodeBlock
+                          code={children.props.children.trimEnd()}
+                          label={
+                            children.props.className
+                              ?.replace("language-", "")
+                              .toUpperCase() || "Code"
+                          }
+                        />
+                      </div>
+                    );
+                  }
+                  return <pre tabIndex={0}>{children}</pre>;
+                },
               }}
             />
           </DocsBody>

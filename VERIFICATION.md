@@ -107,3 +107,10 @@ Reproduce consumer installation with a local dev server running and `bun run tes
 
 - Request typing and its caret now begin at the caption-aligned “Two flat whites.” cue (10.02 s), keeping the existing 5.2-second typing duration. The cue is read from narration captions. Updated timeline test confirms no text at 10 s, progressive text at 12.5 s, completion at 15.3 s and reset.
 - TypeScript/ESLint, 52 tests and production site/registry build pass. All 20 published registry items match the unchanged local registry.
+- Typing cue d478bf6 published via Coolify 9f3qxdhyogfiblhptdubdbva (finished). Production Chrome verifies no early typing, progression after the narration cue, pause/seek/replay, audio ending and responsive/reduced-motion behavior.
+
+## Shared header and browser setup documentation · 2026-09-07
+
+- SiteHeader now stays mounted in the root frame for landing, docs and components. Fumadocs retains its sidebar/search/TOC with an offset below the shared header and a mobile-only docs toolbar; duplicate brand, global links and theme controls are removed from its shell.
+- Reviewed WebMCP and installation guides. Both show the experimental status, copyable chrome://flags/#enable-webmcp-testing address, Enabled/relaunch steps and the official Chrome reference. Clarified native browser activation versus local simulation and remote MCP. Installation separates browser integration from the remote dashboard; WebMCP includes its install command and troubleshooting.
+- MDX code blocks now use the existing copyable CodeBlock UI. TypeScript/ESLint, 52 tests and production site/registry build pass. Browser tests verify the same header DOM node and window sentinel across landing/docs/guide/catalog/home navigation, clipboard contents, mobile sidebar/search and zero runtime errors. Both guides, Comparison and catalog pass full-body light/dark axe at 1440/390 px without overflow. All 20 published registry items match the unchanged local build.

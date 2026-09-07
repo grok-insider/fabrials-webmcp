@@ -267,3 +267,8 @@ html {
     animation: none;
   }
 }
+
+.fabrials-docs {
+  --fd-banner-height: 68px;
+  --fd-docs-height: calc(100dvh - 68px);
+}

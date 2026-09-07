@@ -34,7 +34,10 @@ export function SiteHeader() {
   useEffect(() => setMounted(true), []);
   useEffect(() => setMenu(false), [path]);
   return (
-    <header className="sticky top-0 z-40 border-b bg-background/95 backdrop-blur-sm">
+    <header
+      data-site-header
+      className="sticky top-0 z-40 border-b bg-background/95 backdrop-blur-sm"
+    >
       <div className="flex h-17 w-full items-center justify-between gap-5 px-6 lg:px-10">
         <Link
           href="/"
@@ -124,9 +127,6 @@ export function SiteHeader() {
   );
 }
 export function SiteFrame({ children }: { children: ReactNode }) {
-  const path = usePathname();
-  if (path.startsWith("/docs") || path === "/components")
-    return <>{children}</>;
   return (
     <>
       <SiteHeader />

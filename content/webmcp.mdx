@@ -1,5 +1,19 @@
 WebMCP augments an existing interface with named, structured actions. Start with a useful operation such as filtering a catalog, rather than exposing every low-level click.
 
+## Enable experimental WebMCP
+
+<WebMCPSetup />
+
+Use HTTPS or localhost. If the UI says **Native WebMCP unavailable**, this page could not detect the browser API. Check the flag, relaunch Chrome and reload the app. Enabling the flag does not connect an AI agent by itself; Chrome’s tool inspector can discover and invoke your registered tools.
+
+## Install the React integration
+
+```bash
+bunx shadcn@latest add https://ui.fabrials.com/r/webmcp-provider.json
+```
+
+Complete the [application setup](/docs/installation) first if your app does not yet use shadcn Base UI.
+
 ## Register an application action
 
 ```tsx
